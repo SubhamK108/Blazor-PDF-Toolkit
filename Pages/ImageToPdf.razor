@@ -1,0 +1,252 @@
+@page "/imagetopdf"
+@using static Components.ThemeChanger
+@using static Components.ImageToPDF.ImageToPdf
+@using static Components.ImageToPDF.ImageToPdfCore
+@inject IJSRuntime JSRuntime
+
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Header -->
+    <header id="header">
+
+        <h1>Image to PDF Converter</h1>
+
+        @if (! string.IsNullOrEmpty(ThemeIcon))
+        {
+            <a id="themeSwitch" @onclick="ToggleFullTheme" class="@ThemeIcon" style="margin-top: 1.3em;" title="Change Theme"></a>
+        }
+
+    </header>
+
+
+    <!-- Main -->
+    <div style="text-align: center;">
+
+        <section id="intro" class="@SpecialSectionTheme">
+
+            @if (! @IsSubmitComplete)
+            {
+                <div>
+
+                    <h2>Upload your Image.</h2>
+                    <h4>Limit - 1 Image / 20 MB</h4>
+
+                    <br>
+
+                    <p class="dropzone">
+                        <InputFile OnChange="OnInputFileChange" accept="image/png,image/jpg,image/jpeg,image/svg+xml" title=""></InputFile>
+                        Drag And Drop Image Or Click To Upload.
+                    </p>
+
+                    <p>
+                        <h2>@UploadMessage</h2>
+                    </p>
+
+                    @if (TotalSize > MaxSizeAllowed || (! Array.Exists(FileTypesAllowed, e => e.Equals(FileType))))
+                    {
+                        <p>
+                            <h2>@UploadErrorMessage</h2>
+                            <h1>😢</h1>
+                        </p>
+                    }
+
+                    @if (uploadedImage != null && IsUploadComplete)
+                    {
+                        <div>
+
+                            <p style="margin: 0.5em;">
+
+                                <img src="@previewImageURL" />
+                                <br><br>
+                                @uploadedImage.Name
+                                <a class="icon solid fas fa-times-circle" title="Remove File" @onclick="RemoveImage" style="padding-left: 1em;"></a>
+
+                            </p>
+
+                        </div>
+                    }
+
+                    @if (@IsUploadComplete)
+                    {
+                        <p style="padding-top: 0.75em;">
+                            <h2>@SubmitMessage</h2>
+                        </p>
+
+                        <p>
+                            <button class="button primary large icon solid fas fa-check-circle" @onclick="Submit">Submit</button>
+                        </p>
+                    }
+
+                </div>
+            }
+
+            @if (@IsConversionComplete)
+            {
+                <div>
+
+                    <h2>Image Successfully Converted To PDF.  ✅</h2>
+                    <h1>🎉 🎊</h1>
+                    
+                    <br>
+
+                    <p>
+                        <button class="button primary large icon solid fas fa-file-download" @onclick="DownloadFile">Download</button>
+                    </p>
+
+                    <p>
+                        <a style="cursor: pointer;" class="icon solid fas fa-redo alt" title="Re Do" @onclick="Refresh"></a>
+                    </p>
+
+                    <p>
+                        <h2>@DownloadMessage</h2>
+                    </p>
+
+                </div>
+            }
+
+        </section>
+
+    </div>
+
+@* 
+    <!-- Footer -->
+    <footer id="footer">
+        <section style="text-align: center;">
+            <img src="../images/square_crop_less.jpg" alt="" style="max-width: 93px; border-radius: 50%;" />
+            <h3 style="font-weight: bold;">Subham Karmakar</h3>
+            <p>Coding / Programming || Cloud || Software || Computers || Football</p>
+            <a href="https://www.subhamk.com" class="button">About Me</a>
+            <a href="https://blogs.subhamk.com" class="button">My Blogs</a>
+            <a href="https://cheatsheets.subhamk.com" class="button">My CheatSheets</a>
+        </section>
+        <section>
+            <h2 style="text-align: center;">Follow</h2>
+            <ul class="icons" style="text-align: center;">
+                <li><a href="https://www.twitter.com/SubhamK108" class="icon brands fab fa-twitter alt"></a></li>
+                <!-- <li><a href="#" class="icon brands fa-facebook-f alt"></a></li> -->
+                <!-- <li><a href="#" class="icon brands fa-instagram alt"></a></li> -->
+                <!-- <li><a href="#" class="icon brands fa-linkedin-in alt"></a></li> -->
+                <li><a href="https://www.github.com/SubhamK108" class="icon brands fab fa-github alt" title="GitHub"></a></li>
+                <li><a href="https://www.hackerrank.com/SubhamK108" class="icon brands fab fa-hackerrank alt" title="HackerRank"></a></li>
+                <li><a href="https://www.leetcode.com/SubhamK108" class="icon solid fas fa-code alt" title="LeetCode"></a></li>
+            </ul>
+        </section>
+    </footer> *@
+
+</div>
+
+
+
+@code {
+    private IBrowserFile uploadedImage = null;
+    private string previewImageURL = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (IsFirstLoad)
+        {
+            IsFirstLoad = false;
+            await GetThemeIcon();
+        }
+    }
+    
+    private async Task GetThemeIcon()
+    {
+        ThemeIcon = await JSRuntime.InvokeAsync<string>("getCurrentTheme");
+    }
+
+    private void ToggleFullTheme()
+    {
+        JSRuntime.InvokeVoidAsync("toggleBodyTheme", ThemeIcon);
+        ToggleTheme();
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs args)
+    {
+        previewImageURL = string.Empty;
+        uploadedImage = null;
+        RefreshApp();
+
+        UploadMessage = "Uploading your image ...  ⏳";
+
+        uploadedImage = args.File;
+        TotalSize = uploadedImage.Size;
+        FileType = uploadedImage.ContentType;
+
+        if (TotalSize > MaxSizeAllowed)
+        {
+            previewImageURL = string.Empty;
+            uploadedImage = null;
+            IsUploadComplete = false;
+            UploadMessage = "Upload failed!  ❌";
+            UploadErrorMessage = "Max 20 MB size allowed for the image!";
+            StateHasChanged();
+        }
+
+        if (! Array.Exists(FileTypesAllowed, e => e.Equals(FileType)))
+        {
+            previewImageURL = string.Empty;
+            uploadedImage = null;
+            IsUploadComplete = false;
+            UploadMessage = "Upload failed!  ❌";
+            UploadErrorMessage = "You can only upload an image (JPG, JPEG, PNG or SVG)!";
+            StateHasChanged();
+        }
+
+        if (Array.Exists(FileTypesAllowed, e => e.Equals(FileType)))
+        {
+            IBrowserFile previewImage = await uploadedImage.RequestImageFileAsync(FileType, 100, 100);
+            byte[] previewImageBuffer = new byte[previewImage.Size];
+            await previewImage.OpenReadStream(MaxSizeAllowed).ReadAsync(previewImageBuffer);
+            previewImageURL = $"data:{FileType};base64,{Convert.ToBase64String(previewImageBuffer)}";
+
+            ImageFile = new byte[uploadedImage.Size];
+            await uploadedImage.OpenReadStream(MaxSizeAllowed).ReadAsync(ImageFile);
+        }
+
+        if (string.IsNullOrEmpty(UploadErrorMessage))
+        {
+            IsUploadComplete = true;
+            UploadMessage = "Image uploaded.  ✅";
+        }
+    }
+
+    private async void Submit()
+    {
+        SubmitMessage = "Converting your image to PDF, please have patience ...  ⏳";
+        await Task.Delay(100);
+        ConvertToPdf();
+        StateHasChanged();
+    }
+
+    private async Task SaveAs(string filename, string file)
+    {
+        await JSRuntime.InvokeVoidAsync("saveAsFile", filename, file);
+    }
+
+    private async void DownloadFile()
+    {
+        string filename = "Converted_PDF";
+        DownloadMessage = "Starting download ...  ⏳";
+        await Task.Delay(100);
+        await SaveAs(filename, FinalConvertedPdfURL);
+        DownloadMessage = "Download started  ✅";
+        StateHasChanged();
+    }
+
+    private void RemoveImage()
+    {
+        uploadedImage = null;
+        UploadMessage = "You have deleted that image! You have to upload again.  😕";
+        IsUploadComplete = false;
+    }
+
+    private void Refresh()
+    {
+        previewImageURL = string.Empty;
+        uploadedImage = null;
+        RefreshApp();
+    }
+}

@@ -1,0 +1,312 @@
+@page "/pdfpagedeleter"
+@using static Components.ThemeChanger
+@using static Components.Deleter.PdfPageDeleter
+@using static Components.Deleter.PdfPageDeleterCore
+@using static Components.Deleter.PdfPageDeleterValidation
+@inject IJSRuntime JSRuntime
+
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Header -->
+    <header id="header">
+
+        <h1>PDF Page Deleter</h1>
+
+        @if (! string.IsNullOrEmpty(ThemeIcon))
+        {
+            <a id="themeSwitch" @onclick="ToggleFullTheme" class="@ThemeIcon" style="margin-top: 1.3em;" title="Change Theme"></a>
+        }
+
+    </header>
+
+
+    <!-- Main -->
+    <div style="text-align: center;">
+
+        <section id="intro" class="@SpecialSectionTheme">
+
+            @if (! @IsSubmitComplete)
+            {
+                <div>
+
+                    <h2>Upload your PDF File.</h2>
+                    <h4>Limit - 1 File / 20 MB</h4>
+
+                    <br>
+
+                    <p class="dropzone">
+                        <InputFile OnChange="OnInputFileChange" accept="application/pdf" title=""></InputFile>
+                        Drag And Drop File Or Click To Upload.
+                    </p>
+
+                    <p>
+                        <h2>@UploadMessage</h2>
+                    </p>
+
+                    @if (TotalSize > MaxSizeAllowed || FileType != FileTypeAllowed)
+                    {
+                        <p>
+                            <h2>@UploadErrorMessage</h2>
+                            <h1>😢</h1>
+                        </p>
+                    }
+
+                    @if (uploadedFile != null && IsUploadComplete)
+                    {
+                        <div>
+
+                            <p style="margin: 0.5em;">
+
+                                @uploadedFile.Name &nbsp &nbsp (@TotalPages Pages)
+                                <a class="icon solid fas fa-times-circle" title="Remove File" @onclick="RemoveImage" style="padding-left: 1em;"></a>
+
+                            </p>
+
+                        </div>
+                    }
+
+                    @if (@IsUploadComplete)
+                    {
+                        <div class="pageno-input">
+
+                            <br>
+
+                            <h3>Enter the page no. (e.g. 4) or the range of page nos. (e.g. 4-7):</h3>
+                            <input type="text" @bind-value="pageno" @bind-value:event="oninput" placeholder="Page No." />
+
+                            <br>
+
+                        </div>
+
+                        @if (string.IsNullOrEmpty(pageno))
+                        {
+                        }
+                        else if (! ValidatePageNumber(pageno))
+                        {
+                            <br>
+
+                            <h2>@PageValidationErrorMessage</h2>
+                        }
+                        else
+                        {
+                            <p style="padding-top: 0.75em;">
+                                <h2>@SubmitMessage</h2>
+                            </p>
+
+                            <p>
+                                <button class="button primary large icon solid fas fa-check-circle" @onclick="Submit">Submit</button>
+                            </p>
+                        }
+                    }
+
+                </div>
+            }
+
+            @if (@IsDeletionComplete)
+            {
+                <div>
+
+                    @if (totalPagesToDelete == 1)
+                    {
+                        <h2>Successfully Deleted @totalPagesToDelete Page From The PDF File.  ✅</h2>
+                    }
+                    else
+                    {
+                        <h2>Successfully Deleted @totalPagesToDelete Pages From The PDF File.  ✅</h2>
+                    }
+                    <h1>🎉 🎊</h1>
+                    
+                    <br>
+
+                    <p>
+                        <button class="button primary large icon solid fas fa-file-download" @onclick="DownloadFile">Download</button>
+                    </p>
+
+                    <p>
+                        <a style="cursor: pointer;" class="icon solid fas fa-redo alt" title="Re Do" @onclick="Refresh"></a>
+                    </p>
+
+                    <p>
+                        <h2>@DownloadMessage</h2>
+                    </p>
+
+                </div>
+            }
+
+        </section>
+
+    </div>
+
+@* 
+    <!-- Footer -->
+    <footer id="footer">
+        <section style="text-align: center;">
+            <img src="../images/square_crop_less.jpg" alt="" style="max-width: 93px; border-radius: 50%;" />
+            <h3 style="font-weight: bold;">Subham Karmakar</h3>
+            <p>Coding / Programming || Cloud || Software || Computers || Football</p>
+            <a href="https://www.subhamk.com" class="button">About Me</a>
+            <a href="https://blogs.subhamk.com" class="button">My Blogs</a>
+            <a href="https://cheatsheets.subhamk.com" class="button">My CheatSheets</a>
+        </section>
+        <section>
+            <h2 style="text-align: center;">Follow</h2>
+            <ul class="icons" style="text-align: center;">
+                <li><a href="https://www.twitter.com/SubhamK108" class="icon brands fab fa-twitter alt"></a></li>
+                <!-- <li><a href="#" class="icon brands fa-facebook-f alt"></a></li> -->
+                <!-- <li><a href="#" class="icon brands fa-instagram alt"></a></li> -->
+                <!-- <li><a href="#" class="icon brands fa-linkedin-in alt"></a></li> -->
+                <li><a href="https://www.github.com/SubhamK108" class="icon brands fab fa-github alt" title="GitHub"></a></li>
+                <li><a href="https://www.hackerrank.com/SubhamK108" class="icon brands fab fa-hackerrank alt" title="HackerRank"></a></li>
+                <li><a href="https://www.leetcode.com/SubhamK108" class="icon solid fas fa-code alt" title="LeetCode"></a></li>
+            </ul>
+        </section>
+    </footer> *@
+
+</div>
+
+
+
+@code {
+    private IBrowserFile uploadedFile = null;
+    private string pageno = string.Empty;
+    private int totalPagesToDelete = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (IsFirstLoad)
+        {
+            IsFirstLoad = false;
+            await GetThemeIcon();
+        }
+    }
+    
+    private async Task GetThemeIcon()
+    {
+        ThemeIcon = await JSRuntime.InvokeAsync<string>("getCurrentTheme");
+    }
+
+    private void ToggleFullTheme()
+    {
+        JSRuntime.InvokeVoidAsync("toggleBodyTheme", ThemeIcon);
+        ToggleTheme();
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs args)
+    {
+        pageno = string.Empty;
+        totalPagesToDelete = 0;
+        uploadedFile = null;
+        RefreshApp();
+
+        UploadMessage = "Uploading your PDF file ...  ⏳";
+
+        uploadedFile = args.File;
+        TotalSize = uploadedFile.Size;
+        FileType = uploadedFile.ContentType;
+
+        if (TotalSize > MaxSizeAllowed)
+        {
+            pageno = string.Empty;
+            totalPagesToDelete = 0;
+            uploadedFile = null;
+            IsUploadComplete = false;
+            UploadMessage = "Upload failed!  ❌";
+            UploadErrorMessage = "Max 20 MB size allowed for the PDF file!";
+            StateHasChanged();
+        }
+
+        if (FileType != FileTypeAllowed)
+        {
+            pageno = string.Empty;
+            totalPagesToDelete = 0;
+            uploadedFile = null;
+            IsUploadComplete = false;
+            UploadMessage = "Upload failed!  ❌";
+            UploadErrorMessage = "You can only upload a PDF file!";
+            StateHasChanged();
+        }
+
+        if (FileType == FileTypeAllowed)
+        {
+            PdfFile = new byte[uploadedFile.Size];
+            await uploadedFile.OpenReadStream(MaxSizeAllowed).ReadAsync(PdfFile);
+            GetTotalPages();
+        }
+
+        if (string.IsNullOrEmpty(UploadErrorMessage))
+        {
+            if (TotalPages == 1)
+            {
+                pageno = string.Empty;
+                totalPagesToDelete = 0;
+                uploadedFile = null;
+                IsUploadComplete = false;
+                UploadMessage = $"That PDF file has only {TotalPages} page, which is not enough! It must have at least 2 pages.  😕";
+            }
+            else
+            {
+                IsUploadComplete = true;
+                UploadMessage = "PDF file uploaded.  ✅";
+            }
+        }
+    }
+
+    private async void Submit()
+    {
+        if (pageno.Contains('-'))
+        {
+            totalPagesToDelete = Convert.ToInt32(pageno.Split('-')[1]) - Convert.ToInt32(pageno.Split('-')[0]) + 1;
+        }
+        else
+        {
+            totalPagesToDelete = 1;
+        }
+        
+        if (totalPagesToDelete == 1)
+        {
+            SubmitMessage = $"Deleting {totalPagesToDelete} page from the PDF file, please have patience ...  ⏳";
+        }
+        else
+        {
+            SubmitMessage = $"Deleting {totalPagesToDelete} pages from the PDF file, please have patience ...  ⏳";
+        }
+
+        await Task.Delay(100);
+        DeletePagesFromPdf(pageno);
+        StateHasChanged();
+    }
+
+    private async Task SaveAs(string filename, string file)
+    {
+        await JSRuntime.InvokeVoidAsync("saveAsFile", filename, file);
+    }
+
+    private async void DownloadFile()
+    {
+        string filename = "PageDeleted_PDF";
+        DownloadMessage = "Starting download ...  ⏳";
+        await Task.Delay(100);
+        await SaveAs(filename, FinalDeletedPdfURL);
+        DownloadMessage = "Download started  ✅";
+        StateHasChanged();
+    }
+
+    private void RemoveImage()
+    {
+        pageno = string.Empty;
+        totalPagesToDelete = 0;
+        uploadedFile = null;
+        UploadMessage = "You have deleted that PDF file! You have to upload again.  😕";
+        IsUploadComplete = false;
+    }
+
+    private void Refresh()
+    {
+        pageno = string.Empty;
+        totalPagesToDelete = 0;
+        uploadedFile = null;
+        RefreshApp();
+    }
+}

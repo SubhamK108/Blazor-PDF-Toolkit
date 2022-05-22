@@ -1,0 +1,280 @@
+@page "/pdfencryptor"
+@using static Components.ThemeChanger
+@using static Components.Encryptor.PdfEncryptor
+@using static Components.Encryptor.PdfEncryptorCore
+@inject IJSRuntime JSRuntime
+
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Header -->
+    <header id="header">
+
+        <h1>PDF Encryptor</h1>
+
+        @if (! string.IsNullOrEmpty(ThemeIcon))
+        {
+            <a id="themeSwitch" @onclick="ToggleFullTheme" class="@ThemeIcon" style="margin-top: 1.3em;" title="Change Theme"></a>
+        }
+
+    </header>
+
+
+    <!-- Main -->
+    <div style="text-align: center;">
+
+        <section id="intro" class="@SpecialSectionTheme">
+
+            @if (! @IsSubmitComplete)
+            {
+                <div>
+
+                    <h2>Upload your PDF File.</h2>
+                    <h4>Limit - 1 File / 20 MB</h4>
+
+                    <br>
+
+                    <p class="dropzone">
+                        <InputFile OnChange="OnInputFileChange" accept="application/pdf" title=""></InputFile>
+                        Drag And Drop File Or Click To Upload.
+                    </p>
+
+                    <p>
+                        <h2>@UploadMessage</h2>
+                    </p>
+
+                    @if (TotalSize > MaxSizeAllowed || FileType != FileTypeAllowed)
+                    {
+                        <p>
+                            <h2>@UploadErrorMessage</h2>
+                            <h1>😢</h1>
+                        </p>
+                    }
+
+                    @if (uploadedFile != null && IsUploadComplete)
+                    {
+                        <div>
+
+                            <p style="margin: 0.5em;">
+
+                                @uploadedFile.Name
+                                <a class="icon solid fas fa-times-circle" title="Remove File" @onclick="RemoveImage" style="padding-left: 1em;"></a>
+
+                            </p>
+
+                        </div>
+                    }
+
+                    @if (@IsUploadComplete)
+                    {
+                        <div class="password-input">
+
+                            <br>
+
+                            <h3>Enter your Password:</h3>
+                            <input type="password" @bind-value="password" @bind-value:event="oninput" placeholder="Password" />
+
+                            <br>
+
+                            <h3>Enter your Password again:</h3>
+                            <input type="password" @bind-value="verifiedPassword" @bind-value:event="oninput" placeholder="Verify Password" />
+
+                            <br>
+
+                        </div>
+
+                        @if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(verifiedPassword))
+                        {
+                        }
+                        else if (password != verifiedPassword)
+                        {
+                            <br>
+
+                            <h2>Passwords Don't Match!  ❌</h2>
+                        }
+                        else
+                        {
+                            <p style="padding-top: 0.75em;">
+                                <h2>@SubmitMessage</h2>
+                            </p>
+
+                            <p>
+                                <button class="button primary large icon solid fas fa-check-circle" @onclick="Submit">Submit</button>
+                            </p>
+                        }
+                    }
+
+                </div>
+            }
+
+            @if (@IsEncryptionComplete)
+            {
+                <div>
+
+                    <h2>PDF File Encryption Successful.  🔐✅</h2>
+                    <h1>🎉 🎊</h1>
+                    
+                    <br>
+
+                    <p>
+                        <button class="button primary large icon solid fas fa-file-download" @onclick="DownloadFile">Download</button>
+                    </p>
+
+                    <p>
+                        <a style="cursor: pointer;" class="icon solid fas fa-redo alt" title="Re Do" @onclick="Refresh"></a>
+                    </p>
+
+                    <p>
+                        <h2>@DownloadMessage</h2>
+                    </p>
+
+                </div>
+            }
+
+        </section>
+
+    </div>
+
+@* 
+    <!-- Footer -->
+    <footer id="footer">
+        <section style="text-align: center;">
+            <img src="../images/square_crop_less.jpg" alt="" style="max-width: 93px; border-radius: 50%;" />
+            <h3 style="font-weight: bold;">Subham Karmakar</h3>
+            <p>Coding / Programming || Cloud || Software || Computers || Football</p>
+            <a href="https://www.subhamk.com" class="button">About Me</a>
+            <a href="https://blogs.subhamk.com" class="button">My Blogs</a>
+            <a href="https://cheatsheets.subhamk.com" class="button">My CheatSheets</a>
+        </section>
+        <section>
+            <h2 style="text-align: center;">Follow</h2>
+            <ul class="icons" style="text-align: center;">
+                <li><a href="https://www.twitter.com/SubhamK108" class="icon brands fab fa-twitter alt"></a></li>
+                <!-- <li><a href="#" class="icon brands fa-facebook-f alt"></a></li> -->
+                <!-- <li><a href="#" class="icon brands fa-instagram alt"></a></li> -->
+                <!-- <li><a href="#" class="icon brands fa-linkedin-in alt"></a></li> -->
+                <li><a href="https://www.github.com/SubhamK108" class="icon brands fab fa-github alt" title="GitHub"></a></li>
+                <li><a href="https://www.hackerrank.com/SubhamK108" class="icon brands fab fa-hackerrank alt" title="HackerRank"></a></li>
+                <li><a href="https://www.leetcode.com/SubhamK108" class="icon solid fas fa-code alt" title="LeetCode"></a></li>
+            </ul>
+        </section>
+    </footer> *@
+
+</div>
+
+
+
+@code {
+    private IBrowserFile uploadedFile = null;
+    private string password = string.Empty;
+    private string verifiedPassword = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (IsFirstLoad)
+        {
+            IsFirstLoad = false;
+            await GetThemeIcon();
+        }
+    }
+    
+    private async Task GetThemeIcon()
+    {
+        ThemeIcon = await JSRuntime.InvokeAsync<string>("getCurrentTheme");
+    }
+
+    private void ToggleFullTheme()
+    {
+        JSRuntime.InvokeVoidAsync("toggleBodyTheme", ThemeIcon);
+        ToggleTheme();
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs args)
+    {
+        password = string.Empty;
+        verifiedPassword = string.Empty;
+        uploadedFile = null;
+        RefreshApp();
+
+        UploadMessage = "Uploading your PDF file ...  ⏳";
+
+        uploadedFile = args.File;
+        TotalSize = uploadedFile.Size;
+        FileType = uploadedFile.ContentType;
+
+        if (TotalSize > MaxSizeAllowed)
+        {
+            password = string.Empty;
+            verifiedPassword = string.Empty;
+            uploadedFile = null;
+            IsUploadComplete = false;
+            UploadMessage = "Upload failed!  ❌";
+            UploadErrorMessage = "Max 20 MB size allowed for the PDF file!";
+            StateHasChanged();
+        }
+
+        if (FileType != FileTypeAllowed)
+        {
+            password = string.Empty;
+            verifiedPassword = string.Empty;
+            uploadedFile = null;
+            IsUploadComplete = false;
+            UploadMessage = "Upload failed!  ❌";
+            UploadErrorMessage = "You can only upload a PDF file!";
+            StateHasChanged();
+        }
+
+        if (FileType == FileTypeAllowed)
+        {
+            PdfFile = new byte[uploadedFile.Size];
+            await uploadedFile.OpenReadStream(MaxSizeAllowed).ReadAsync(PdfFile);
+        }
+
+        if (string.IsNullOrEmpty(UploadErrorMessage))
+        {
+            IsUploadComplete = true;
+            UploadMessage = "PDF file uploaded.  ✅";
+        }
+    }
+
+    private async void Submit()
+    {
+        SubmitMessage = "Encrypting your PDF file, please have patience ...  ⏳";
+        await Task.Delay(100);
+        EncryptPdf(verifiedPassword);
+        StateHasChanged();
+    }
+
+    private async Task SaveAs(string filename, string file)
+    {
+        await JSRuntime.InvokeVoidAsync("saveAsFile", filename, file);
+    }
+
+    private async void DownloadFile()
+    {
+        string filename = "Encrypted_PDF";
+        DownloadMessage = "Starting download ...  ⏳";
+        await Task.Delay(100);
+        await SaveAs(filename, FinalEncryptedPdfURL);
+        DownloadMessage = "Download started  ✅";
+        StateHasChanged();
+    }
+
+    private void RemoveImage()
+    {
+        password = string.Empty;
+        verifiedPassword = string.Empty;
+        uploadedFile = null;
+        UploadMessage = "You have deleted that PDF file! You have to upload again.  😕";
+        IsUploadComplete = false;
+    }
+
+    private void Refresh()
+    {
+        password = string.Empty;
+        verifiedPassword = string.Empty;
+        uploadedFile = null;
+        RefreshApp();
+    }
+}
