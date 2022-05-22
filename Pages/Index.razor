@@ -1,5 +1,4 @@
 ﻿@page "/"
-@using static Components.ThemeChanger
 @inject IJSRuntime JSRuntime;
 
 
@@ -11,18 +10,13 @@
 
         <h1>Welcome to my PDF Toolkit</h1>
 
-        @if (! string.IsNullOrEmpty(ThemeIcon))
-        {
-            <a id="themeSwitch" @onclick="ToggleFullTheme" class="@ThemeIcon" style="margin-top: 1.3em;" title="Change Theme"></a>
-        }
-
     </header>
 
 
     <!-- Main -->
     <div>
 
-        <section id="intro" class="@SpecialSectionTheme">
+        <section id="intro" class="main special">
 
             <h1>Tools Available</h1>
 
@@ -34,7 +28,7 @@
     <!-- Options -->
     <div>
 
-        <section id="intro" class="@SpecialSectionTheme">
+        <section id="intro" class="main special">
 
             <a href="/pdfmerger" class="button primary large">PDF Merger</a>
             <a href="/pdfencryptor" class="button primary large">PDF Encryptor</a>
@@ -51,21 +45,30 @@
         <section style="text-align: center;">
             <img src="../images/square_crop_less.jpg" alt="" style="max-width: 93px; border-radius: 50%;" />
             <h3 style="font-weight: bold;">Subham Karmakar</h3>
-            <p>Coding / Programming || Cloud || Software || Computers || Football</p>
+            <p>Coder / Programmer || Software Engineer || Likes to tinker with new technologies || Learning everyday</p>
             <a href="https://www.subhamk.com" class="button">About Me</a>
             <a href="https://blogs.subhamk.com" class="button">My Blogs</a>
-            <a href="https://cheatsheets.subhamk.com" class="button">My CheatSheets</a>
         </section>
         <section>
             <h2 style="text-align: center;">Follow</h2>
             <ul class="icons" style="text-align: center;">
-                <li><a href="https://www.twitter.com/SubhamK108" class="icon brands fab fa-twitter alt"></a></li>
                 <!-- <li><a href="#" class="icon brands fa-facebook-f alt"></a></li> -->
                 <!-- <li><a href="#" class="icon brands fa-instagram alt"></a></li> -->
-                <!-- <li><a href="#" class="icon brands fa-linkedin-in alt"></a></li> -->
-                <li><a href="https://www.github.com/SubhamK108" class="icon brands fab fa-github alt" title="GitHub"></a></li>
-                <li><a href="https://www.hackerrank.com/SubhamK108" class="icon brands fab fa-hackerrank alt" title="HackerRank"></a></li>
-                <li><a href="https://www.leetcode.com/SubhamK108" class="icon solid fas fa-code alt" title="LeetCode"></a></li>
+                <li>
+                    <a href="https://www.github.com/SubhamK108" class="icon brands fab fa-github alt" title="GitHub"></a>
+                </li>
+                <li>
+                    <a href="https://www.twitter.com/SubhamK108" class="icon brands fab fa-twitter alt" title="Twitter"></a>
+                </li>
+                <li>
+                    <a href="https://www.linkedin.com/in/subham-karmakar-96024b200/" class="icon brands fab fa-linkedin-in alt" title="LinkedIn"></a>
+                </li>
+                <li>
+                    <a href="https://www.hackerrank.com/SubhamK108" class="icon brands fab fa-hackerrank alt" title="HackerRank"></a>
+                </li>
+                <li>
+                    <a href="https://www.leetcode.com/SubhamK108" class="icon solid fas fa-code alt" title="LeetCode"></a>
+                </li>
             </ul>
         </section>
     </footer>
@@ -75,23 +78,7 @@
 
 
 @code {
-    protected override async Task OnInitializedAsync()
-    {
-        if (IsFirstLoad)
-        {
-            IsFirstLoad = false;
-            await GetThemeIcon();
-        }
-    }
-    
-    private async Task GetThemeIcon()
-    {
-        ThemeIcon = await JSRuntime.InvokeAsync<string>("getCurrentTheme");
-    }
-
-    private void ToggleFullTheme()
-    {
-        JSRuntime.InvokeVoidAsync("toggleBodyTheme", ThemeIcon);
-        ToggleTheme();
-    }
+    //protected override async Task OnInitializedAsync()
+        //{
+    //}
 }

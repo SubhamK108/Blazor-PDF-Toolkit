@@ -1,5 +1,4 @@
 @page "/pdfpagedeleter"
-@using static Components.ThemeChanger
 @using static Components.Deleter.PdfPageDeleter
 @using static Components.Deleter.PdfPageDeleterCore
 @using static Components.Deleter.PdfPageDeleterValidation
@@ -14,18 +13,13 @@
 
         <h1>PDF Page Deleter</h1>
 
-        @if (! string.IsNullOrEmpty(ThemeIcon))
-        {
-            <a id="themeSwitch" @onclick="ToggleFullTheme" class="@ThemeIcon" style="margin-top: 1.3em;" title="Change Theme"></a>
-        }
-
     </header>
 
 
     <!-- Main -->
     <div style="text-align: center;">
 
-        <section id="intro" class="@SpecialSectionTheme">
+        <section id="intro" class="main special">
 
             @if (! @IsSubmitComplete)
             {
@@ -173,25 +167,9 @@
     private string pageno = string.Empty;
     private int totalPagesToDelete = 0;
 
-    protected override async Task OnInitializedAsync()
-    {
-        if (IsFirstLoad)
-        {
-            IsFirstLoad = false;
-            await GetThemeIcon();
-        }
-    }
-    
-    private async Task GetThemeIcon()
-    {
-        ThemeIcon = await JSRuntime.InvokeAsync<string>("getCurrentTheme");
-    }
-
-    private void ToggleFullTheme()
-    {
-        JSRuntime.InvokeVoidAsync("toggleBodyTheme", ThemeIcon);
-        ToggleTheme();
-    }
+    //protected override async Task OnInitializedAsync()
+    //{
+    //}
 
     private async Task OnInputFileChange(InputFileChangeEventArgs args)
     {

@@ -250,21 +250,7 @@ body {
 }
 
 body {
-    background-color: #c05050;
-    background-image: url("images/overlay.png"), -moz-linear-gradient(45deg, #c05050 15%, #493581 85%);
-    background-image: url("images/overlay.png"), -webkit-linear-gradient(45deg, #c05050 15%, #493581 85%);
-    background-image: url("images/overlay.png"), -ms-linear-gradient(45deg, #c05050 15%, #493581 85%);
-    background-image: url("images/overlay.png"), linear-gradient(45deg, #c05050 15%, #493581 85%);
-}
-
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #361717;
-        background-image: url("images/overlay.png"), -moz-linear-gradient(45deg, #361717 15%, #1a0f35 85%);
-        background-image: url("images/overlay.png"), -webkit-linear-gradient(45deg, #361717 15%, #1a0f35 85%);
-        background-image: url("images/overlay.png"), -ms-linear-gradient(45deg, #361717 15%, #1a0f35 85%);
-        background-image: url("images/overlay.png"), linear-gradient(45deg, #361717 15%, #1a0f35 85%);
-    }
+    background-color: #2b2c2e;
 }
 
 .loading-header {
