@@ -1865,6 +1865,8 @@ input, select, textarea {
 		min-width: 9.25em;
 		padding: 0 1.5em;
 		margin-bottom: 0.25em;
+		margin-right: 0.40em;
+		margin-left: 0.40em;
 		text-align: center;
 		text-decoration: none;
 		white-space: nowrap;
@@ -3126,7 +3128,7 @@ input, select, textarea {
 /* Header */
 
 	#header {
-		padding: 7em 5em 4em 5em ;
+		padding: 5em 5em 4em 5em ;
 		text-align: center;
 	}
 
@@ -3780,7 +3782,7 @@ input, select, textarea {
 		flex-wrap: wrap;
 		padding: 5em 3.02em 3em 5em ;
 		width: calc(100% + 2em);
-		margin: 0 0 3em -2em;
+		margin: 0 0 1em -2em;
 	}
 
 		#footer > * {
