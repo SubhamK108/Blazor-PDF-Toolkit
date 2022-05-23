@@ -1,6 +1,6 @@
 name: DeployToGitHubPages
 env:
-  PUBLISH_DIR: bin/Release/net5.0/publish/wwwroot/
+  PUBLISH_DIR: bin/Release/net6.0/publish/wwwroot/
 
 on:
   push:
@@ -11,12 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: '6.0.x'
+
+    - name: Build App
+      run: dotnet build -c Release
 
     - name: Publish App
       run: dotnet publish -c Release
