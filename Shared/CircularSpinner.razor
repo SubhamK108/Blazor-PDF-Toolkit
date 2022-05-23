@@ -1,1 +1,11 @@
-<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+<div style="margin-top: @MarginTop;">
+    <div style="width: @Size; height: @Size;" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+</div>
+
+@code {
+    [Parameter]
+    public string Size { get; set; }
+
+    [Parameter]
+    public string MarginTop { get; set; }
+}

@@ -38,6 +38,11 @@
                         <h2>@UploadMessage</h2>
                     </p>
 
+                    @if (UploadMessage.Equals("Uploading your image ...  ⏳"))
+                    {
+                        <CircularSpinner MarginTop="-1.5em" Size="3.5em" />
+                    }
+
                     @if (TotalSize > MaxSizeAllowed || (! Array.Exists(FileTypesAllowed, e => e.Equals(FileType))))
                     {
                         <p>
@@ -68,9 +73,16 @@
                             <h2>@SubmitMessage</h2>
                         </p>
 
-                        <p>
-                            <button class="button primary large icon solid fas fa-check-circle" @onclick="Submit">Submit</button>
-                        </p>
+                        @if (string.IsNullOrEmpty(SubmitMessage))
+                        {
+                            <p>
+                                <button class="button primary large icon solid fas fa-check-circle" @onclick="Submit">Submit</button>
+                            </p>
+                        }
+                        else
+                        {
+                            <CircularSpinner MarginTop="-1.5em" Size="3.5em" />
+                        }
                     }
 
                 </div>
@@ -96,6 +108,11 @@
                     <p>
                         <h2>@DownloadMessage</h2>
                     </p>
+
+                    @if (DownloadMessage.Equals("Starting download ...  ⏳"))
+                    {
+                        <CircularSpinner MarginTop="-1.5em" Size="3.5em" />
+                    }
 
                 </div>
             }
@@ -137,9 +154,11 @@
     private IBrowserFile uploadedImage = null;
     private string previewImageURL = string.Empty;
 
-    //protected override async Task OnInitializedAsync()
-    //{
-    //}
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(0);
+        Refresh();
+    }
 
     private async Task OnInputFileChange(InputFileChangeEventArgs args)
     {
@@ -148,6 +167,8 @@
         RefreshApp();
 
         UploadMessage = "Uploading your image ...  ⏳";
+
+        await Task.Delay(1500);
 
         uploadedImage = args.File;
         TotalSize = uploadedImage.Size;
@@ -194,7 +215,7 @@
     private async void Submit()
     {
         SubmitMessage = "Converting your image to PDF, please have patience ...  ⏳";
-        await Task.Delay(100);
+        await Task.Delay(1500);
         ConvertToPdf();
         StateHasChanged();
     }
@@ -208,7 +229,7 @@
     {
         string filename = "Converted_PDF";
         DownloadMessage = "Starting download ...  ⏳";
-        await Task.Delay(100);
+        await Task.Delay(1500);
         await SaveAs(filename, FinalConvertedPdfURL);
         DownloadMessage = "Download started  ✅";
         StateHasChanged();

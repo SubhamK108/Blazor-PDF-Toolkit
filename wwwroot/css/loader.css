@@ -250,14 +250,14 @@ body {
 }
 
 body {
-    background-color: #2b2c2e;
+    background-color: #222222;
 }
 
 .loading-header {
     font-size: 33px;
     display: block;
     text-align: center;
-    color: #fff;
+    color: #B2B2B2;
     padding-top: 19vh;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     letter-spacing: 00.1em;
@@ -267,7 +267,7 @@ body {
     font-size: 22px;
     display: block;
     text-align: center;
-    color: #fff;
+    color: #B2B2B2;
     padding-top: 35vh;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     letter-spacing: 00.1em;

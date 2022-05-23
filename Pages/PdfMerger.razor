@@ -38,6 +38,11 @@
                         <h2>@UploadMessage</h2>
                     </p>
 
+                    @if (UploadMessage.Equals("Uploading your file(s) ...  ⏳"))
+                    {
+                        <CircularSpinner MarginTop="-1.5em" Size="3.5em" />
+                    }
+
                     @if (TotalFiles > MaxFilesAllowed || TotalSize > MaxSizeAllowed || FileType != FileTypeAllowed)
                     {
                         <p>
@@ -79,9 +84,16 @@
                             <h2>@SubmitMessage</h2>
                         </p>
 
-                        <p>
-                            <button class="button primary large icon solid fas fa-check-circle" @onclick="Submit">Submit</button>
-                        </p>
+                        @if (string.IsNullOrEmpty(SubmitMessage))
+                        {
+                            <p>
+                                <button class="button primary large icon solid fas fa-check-circle" @onclick="Submit">Submit</button>
+                            </p>
+                        }
+                        else
+                        {
+                            <CircularSpinner MarginTop="-1.5em" Size="3.5em" />
+                        }
                     }
 
                 </div>
@@ -107,6 +119,11 @@
                     <p>
                         <h2>@DownloadMessage</h2>
                     </p>
+
+                    @if (DownloadMessage.Equals("Starting download ...  ⏳"))
+                    {
+                        <CircularSpinner MarginTop="-1.5em" Size="3.5em" />
+                    }
 
                 </div>
             }
@@ -147,16 +164,21 @@
 @code {
     private List<IBrowserFile> uploadedFiles = new List<IBrowserFile>();
 
-    //protected override async Task OnInitializedAsync()
-    //{
-    //}
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(0);
+        Refresh();
+    }
 
     private async Task OnInputFileChange(InputFileChangeEventArgs args)
     {
         uploadedFiles.Clear();
         RefreshApp();
 
-        UploadMessage = "Uploading your files ...  ⏳";
+        UploadMessage = "Uploading your file(s) ...  ⏳";
+
+        await Task.Delay(1500);
+
         TotalFiles = args.FileCount;
 
         if (TotalFiles > MaxFilesAllowed)
@@ -218,7 +240,7 @@
     private async void Submit()
     {
         SubmitMessage = $"Merging {TotalFiles} PDF files, please have patience ...  ⏳";
-        await Task.Delay(100);
+        await Task.Delay(1500);
         MergePdf();
         StateHasChanged();
     }
@@ -232,7 +254,7 @@
     {
         string filename = "Merged_PDF";
         DownloadMessage = "Starting download ...  ⏳";
-        await Task.Delay(100);
+        await Task.Delay(1500);
         await SaveAs(filename, FinalMergedPdfURL);
         DownloadMessage = "Download started  ✅";
         StateHasChanged();

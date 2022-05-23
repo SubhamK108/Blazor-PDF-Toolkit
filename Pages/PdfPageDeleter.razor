@@ -39,6 +39,11 @@
                         <h2>@UploadMessage</h2>
                     </p>
 
+                    @if (UploadMessage.Equals("Uploading your PDF file ...  ⏳"))
+                    {
+                        <CircularSpinner MarginTop="-1.5em" Size="3.5em" />
+                    }
+
                     @if (TotalSize > MaxSizeAllowed || FileType != FileTypeAllowed)
                     {
                         <p>
@@ -89,9 +94,16 @@
                                 <h2>@SubmitMessage</h2>
                             </p>
 
-                            <p>
-                                <button class="button primary large icon solid fas fa-check-circle" @onclick="Submit">Submit</button>
-                            </p>
+                            @if (string.IsNullOrEmpty(SubmitMessage))
+                            {
+                                <p>
+                                    <button class="button primary large icon solid fas fa-check-circle" @onclick="Submit">Submit</button>
+                                </p>
+                            }
+                            else
+                            {
+                                <CircularSpinner MarginTop="-1.5em" Size="3.5em" />
+                            }
                         }
                     }
 
@@ -125,6 +137,11 @@
                     <p>
                         <h2>@DownloadMessage</h2>
                     </p>
+
+                    @if (DownloadMessage.Equals("Starting download ...  ⏳"))
+                    {
+                        <CircularSpinner MarginTop="-1.5em" Size="3.5em" />
+                    }
 
                 </div>
             }
@@ -167,9 +184,11 @@
     private string pageno = string.Empty;
     private int totalPagesToDelete = 0;
 
-    //protected override async Task OnInitializedAsync()
-    //{
-    //}
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(0);
+        Refresh();
+    }
 
     private async Task OnInputFileChange(InputFileChangeEventArgs args)
     {
@@ -179,6 +198,8 @@
         RefreshApp();
 
         UploadMessage = "Uploading your PDF file ...  ⏳";
+
+        await Task.Delay(1500);
 
         uploadedFile = args.File;
         TotalSize = uploadedFile.Size;
@@ -251,7 +272,7 @@
             SubmitMessage = $"Deleting {totalPagesToDelete} pages from the PDF file, please have patience ...  ⏳";
         }
 
-        await Task.Delay(100);
+        await Task.Delay(1500);
         DeletePagesFromPdf(pageno);
         StateHasChanged();
     }
@@ -265,7 +286,7 @@
     {
         string filename = "PageDeleted_PDF";
         DownloadMessage = "Starting download ...  ⏳";
-        await Task.Delay(100);
+        await Task.Delay(1500);
         await SaveAs(filename, FinalDeletedPdfURL);
         DownloadMessage = "Download started  ✅";
         StateHasChanged();

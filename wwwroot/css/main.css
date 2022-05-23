@@ -96,7 +96,7 @@ input, select, textarea {
 	}
 
 	body {
-		background-color: #2b2c2e;
+		background-color: #222222;
 	}
 
 		body.is-preload *, body.is-preload *:before, body.is-preload *:after {
@@ -136,7 +136,7 @@ input, select, textarea {
 /* Type */
 
 	body {
-		background-color: #2b2c2e;
+		background-color: #222222;
 		color: rgba(255, 255, 255, 0.65);
 	}
 
@@ -319,19 +319,19 @@ input, select, textarea {
 	}
 
 	input, select, textarea {
-		color: #ffffff;
+		color: #B2B2B2;
 	}
 
 	a:hover {
-		color: #ffffff;
+		color: #B2B2B2;
 	}
 
 	strong, b {
-		color: #ffffff;
+		color: #B2B2B2;
 	}
 
 	h1, h2, h3, h4, h5, h6 {
-		color: #ffffff;
+		color: #B2B2B2;
 	}
 
 	blockquote {
@@ -2009,7 +2009,7 @@ input, select, textarea {
 			input[type="button"].primary.icon:before,
 			button.primary.icon:before,
 			.button.primary.icon:before {
-				color: #ffffff !important;
+				color: #B2B2B2 !important;
 			}
 
 /* Form */
@@ -2166,7 +2166,7 @@ input, select, textarea {
 	}
 
 	label {
-		color: #ffffff;
+		color: #B2B2B2;
 	}
 
 	input[type="text"],
@@ -2192,7 +2192,7 @@ input, select, textarea {
 	}
 
 		select option {
-			color: #ffffff;
+			color: #B2B2B2;
 			background: #c05050;
 		}
 
@@ -2209,8 +2209,8 @@ input, select, textarea {
 
 	input[type="checkbox"]:checked + label:before,
 	input[type="radio"]:checked + label:before {
-		background-color: #ffffff;
-		border-color: #ffffff;
+		background-color: #B2B2B2;
+		border-color: #B2B2B2;
 		color: #c05050;
 	}
 
@@ -2379,7 +2379,7 @@ input, select, textarea {
 
 	.icon.alt {
 		border-color: rgba(255, 255, 255, 0.35);
-		color: #ffffff;
+		color: #B2B2B2;
 	}
 
 		.icon.alt:hover {
@@ -2539,7 +2539,7 @@ input, select, textarea {
 	}
 
 	dl dt {
-		color: #ffffff;
+		color: #B2B2B2;
 	}
 
 /* Actions */
@@ -2829,7 +2829,7 @@ input, select, textarea {
 		}
 
 	table th {
-		color: #ffffff;
+		color: #B2B2B2;
 	}
 
 	table thead {
@@ -2931,7 +2931,7 @@ input, select, textarea {
 			-ms-flex: 1;
 			flex: 1;
 			padding: 1.5em;
-			color: #ffffff;
+			color: #B2B2B2;
 			text-align: center;
 		}
 
@@ -3288,7 +3288,7 @@ input, select, textarea {
 		-webkit-transition: background-color 0.2s ease, border-top-left-radius 0.2s ease, border-top-right-radius 0.2s ease, padding 0.2s ease;
 		-ms-transition: background-color 0.2s ease, border-top-left-radius 0.2s ease, border-top-right-radius 0.2s ease, padding 0.2s ease;
 		transition: background-color 0.2s ease, border-top-left-radius 0.2s ease, border-top-right-radius 0.2s ease, padding 0.2s ease;
-		background-color: #ffffff;
+		background-color: #B2B2B2;
 		color: #636363;
 		position: absolute;
 		width: 64em;
@@ -3318,16 +3318,16 @@ input, select, textarea {
 		}
 
 		#nav blockquote {
-			border-left-color: #dddddd;
+			border-left-color: #B2B2B2;
 		}
 
 		#nav code {
 			background: rgba(209, 209, 209, 0.25);
-			border-color: #dddddd;
+			border-color: #B2B2B2;
 		}
 
 		#nav hr {
-			border-bottom-color: #dddddd;
+			border-bottom-color: #B2B2B2;
 		}
 
 		#nav + #main {
@@ -3379,7 +3379,7 @@ input, select, textarea {
 					}
 
 					#nav ul li a.active {
-						background-color: #ffffff;
+						background-color: #B2B2B2;
 						box-shadow: none;
 					}
 
@@ -3424,25 +3424,25 @@ input, select, textarea {
 /* Main */
 
 	#main {
-		background-color: #2b2c2e;
-		color: #dddddd;
+		background-color: #222222;
+		color: #B2B2B2;
 		border-radius: 0.25em;
 	}
 
 		#main input, #main select, #main textarea {
-			color: #dddddd;
+			color: #B2B2B2;
 		}
 
 		#main a:hover {
-			color: #dddddd;
+			color: #B2B2B2;
 		}
 
 		#main strong, #main b {
-			color: #dddddd;
+			color: #B2B2B2;
 		}
 
 		#main h1, #main h2, #main h3, #main h4, #main h5, #main h6 {
-			color: #dddddd;
+			color: #B2B2B2;
 		}
 
 		#main blockquote {
@@ -3468,8 +3468,8 @@ input, select, textarea {
 		#main button,
 		#main .button {
 			background-color: transparent;
-			box-shadow: inset 0 0 0 1px #dddddd;
-			color: #dddddd !important;
+			box-shadow: inset 0 0 0 1px #B2B2B2;
+			color: #ffffff !important;
 		}
 
 			#main input[type="submit"]:hover,
@@ -3527,11 +3527,11 @@ input, select, textarea {
 				#main input[type="button"].primary.icon:before,
 				#main button.primary.icon:before,
 				#main .button.primary.icon:before {
-					color: #ffffff !important;
+					color: #B2B2B2 !important;
 				}
 
 		#main label {
-			color: #dddddd;
+			color: #B2B2B2;
 		}
 
 		#main input[type="text"],
@@ -3557,13 +3557,13 @@ input, select, textarea {
 		}
 
 			#main select option {
-				color: #dddddd;
-				background: #ffffff;
+				color: #B2B2B2;
+				background: #B2B2B2;
 			}
 
 		#main input[type="checkbox"] + label,
 		#main input[type="radio"] + label {
-			color: #dddddd;
+			color: #B2B2B2;
 		}
 
 			#main input[type="checkbox"] + label:before,
@@ -3574,9 +3574,9 @@ input, select, textarea {
 
 		#main input[type="checkbox"]:checked + label:before,
 		#main input[type="radio"]:checked + label:before {
-			background-color: #dddddd;
+			background-color: #B2B2B2;
 			border-color: #505050;
-			color: #ffffff;
+			color: #B2B2B2;
 		}
 
 		#main input[type="checkbox"]:focus + label:before,
@@ -3615,7 +3615,7 @@ input, select, textarea {
 
 		#main .icon.alt {
 			border-color: #505050;
-			color: #dddddd;
+			color: #B2B2B2;
 		}
 
 			#main .icon.alt:hover {
@@ -3631,11 +3631,11 @@ input, select, textarea {
 		}
 
 		#main dl dt {
-			color: #dddddd;
+			color: #B2B2B2;
 		}
 
 		#main header.major h2:after {
-			background-color: #dddddd;
+			background-color: #B2B2B2;
 			background-image: -moz-linear-gradient(90deg, #c05050, #493581, #05576b);
 			background-image: -webkit-linear-gradient(90deg, #c05050, #493581, #05576b);
 			background-image: -ms-linear-gradient(90deg, #c05050, #493581, #05576b);
@@ -3651,7 +3651,7 @@ input, select, textarea {
 			}
 
 		#main table th {
-			color: #dddddd;
+			color: #B2B2B2;
 		}
 
 		#main table thead {
@@ -3939,3 +3939,15 @@ input, select, textarea {
 		margin: auto;
 	}
 
+
+	.not-found-text {
+		width: 100%;
+		height: 100%;
+		margin-top: 12em;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		font-size: 1.8em;
+	}
