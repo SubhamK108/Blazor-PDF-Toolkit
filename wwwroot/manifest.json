@@ -1,10 +1,12 @@
 {
   "name": "PDF Toolkit",
   "short_name": "PDF Toolkit",
+  "description": "Tools that help you manage and manipulate PDF files.",
   "start_url": "./",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#2b2c2e",
-  "theme_color": "#2b2c2e",
+  "background_color": "#222222",
+  "theme_color": "#222222",
   "icons": [
     {
       "src": "android-chrome-192x192.png",
@@ -15,6 +17,59 @@
       "src": "android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "PDF Merger",
+      "description": "Merge your multiple PDFs",
+      "url": "/pdfmerger",
+      "icons": [{ "src": "android-chrome-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "PDF Encryptor",
+      "description": "Encrypt your PDFs",
+      "url": "/pdfencryptor",
+      "icons": [{ "src": "android-chrome-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "PDF Page Deleter",
+      "description": "Delete pages from your PDFs",
+      "url": "/pdfpagedeleter",
+      "icons": [{ "src": "android-chrome-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Image to PDF",
+      "description": "Convert your images to PDF",
+      "url": "/imagetopdf",
+      "icons": [{ "src": "android-chrome-192x192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/SS_HOME.jpeg",
+      "type": "image/jpeg",
+      "sizes": "1651x833"
+    },
+    {
+      "src": "/images/SS_1.jpeg",
+      "type": "image/jpeg",
+      "sizes": "1651x833"
+    },
+    {
+      "src": "/images/SS_2.jpeg",
+      "type": "image/jpeg",
+      "sizes": "1651x833"
+    },
+    {
+      "src": "/images/SS_3.jpeg",
+      "type": "image/jpeg",
+      "sizes": "1651x833"
+    },
+    {
+      "src": "/images/SS_4.jpeg",
+      "type": "image/jpeg",
+      "sizes": "1651x833"
     }
   ]
 }
