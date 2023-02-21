@@ -1,4 +1,4 @@
-# PDF-Toolkit
+# Blazor-PDF-Toolkit
 A Web Application written in Blazor Webassembly (.NET) that has various tools for manipulating PDF files.
 
 
