@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>PDF Toolkit - Subham Karmakar</title>
+    <meta name="description" content="A toolkit for manipulating PDF files.">
+    <base href="/" />
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/loader.css" />
+    <link rel="stylesheet" href="css/circular-loader.css" />
+    <noscript>
+        <link rel="stylesheet" href="css/noscript.css" /></noscript>
+</head>
+
+<body>
+
+    <app>
+
+        <h1 class="loading-header">Hello There! 😀</h1>
+
+        <div class="cube-wrapper">
+            <div class="cube-folding">
+                <span class="leaf1"></span>
+                <span class="leaf2"></span>
+                <span class="leaf3"></span>
+                <span class="leaf4"></span>
+            </div>
+        </div>
+
+        <h1 class="loading-footer">Welcome to my PDF Toolkit</h1>
+
+    </app>
+
+
+    <!-- <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div> -->
+
+</body>
+
+<!-- Start Single Page Apps for GitHub Pages -->
+<script type="text/javascript">
+
+    // Single Page Apps for GitHub Pages
+    // https://github.com/rafrex/spa-github-pages
+    // Copyright (c) 2016 Rafael Pedicini, licensed under the MIT License
+    // ----------------------------------------------------------------------
+    // This script checks to see if a redirect is present in the query string
+    // and converts it back into the correct url and adds it to the
+    // browser's history using window.history.replaceState(...),
+    // which won't cause the browser to attempt to load the new url.
+    // When the single page app is loaded further down in this file,
+    // the correct url will be waiting in the browser's history for
+    // the single page app to route accordingly.
+    (function (l) {
+        if (l.search) {
+            var q = {};
+            l.search.slice(1).split('&').forEach(function (v) {
+                var a = v.split('=');
+                q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
+            });
+            if (q.p !== undefined) {
+                window.history.replaceState(null, null,
+                    l.pathname.slice(0, -1) + (q.p || '') +
+                    (q.q ? ('?' + q.q) : '') +
+                    l.hash
+                );
+            }
+        }
+    }(window.location))
+
+</script>
+<!-- End Single Page Apps for GitHub Pages -->
+
+<!-- Scripts for toggling the theme -->
+<script type="text/javascript">
+
+    function getCurrentTheme() {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'icon solid fas fa-sun';
+        } else {
+            return 'icon solid fas fa-moon';
+        }
+    }
+
+    function toggleBodyTheme(themeIcon) {
+        if (themeIcon == 'icon solid fas fa-sun') {
+            document.body.className = 'light';
+        } else {
+            document.body.className = 'dark';
+        }
+    }
+
+</script>
+
+<!-- Script to download a file -->
+<script type="text/javascript">
+
+    function saveAsFile(fileName, file) {
+        var link = document.createElement('a');
+        link.download = fileName;
+        link.href = file;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+</script>
+
+<script src="_framework/blazor.webassembly.js"></script>
+<script>navigator.serviceWorker.register('service-worker.js');</script>
+
+
+</html>
