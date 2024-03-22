@@ -1,0 +1,140 @@
+{
+  "name": "PDF Toolkit",
+  "short_name": "PDF Toolkit",
+  "description": "Various tools for manipulating PDF files.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#6d6d6d",
+  "background_color": "#6d6d6d",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "PDF Merger",
+      "description": "Merge multiple PDF files.",
+      "url": "/pdf-merger",
+      "icons": [{ "src": "/android-chrome-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "PDF Page Extractor",
+      "description": "Extract pages from a PDF file.",
+      "url": "/pdf-page-extractor",
+      "icons": [{ "src": "/android-chrome-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "PDF Page Deleter",
+      "description": "Delete pages from a PDF file.",
+      "url": "/pdf-page-deleter",
+      "icons": [{ "src": "/android-chrome-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Image to PDF",
+      "description": "Convert any PNG/JPG/JPEG Image to a PDF file.",
+      "url": "/image-to-pdf",
+      "icons": [{ "src": "/android-chrome-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "PDF Encryptor",
+      "description": "Encrypt a PDF file with a password.",
+      "url": "/pdf-encryptor",
+      "icons": [{ "src": "/android-chrome-192x192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/screenshots/SS_1.jpeg",
+      "type": "image/jpeg",
+      "sizes": "413x758",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/images/screenshots/SS_2.jpeg",
+      "type": "image/jpeg",
+      "sizes": "413x758",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/images/screenshots/SS_3.jpeg",
+      "type": "image/jpeg",
+      "sizes": "413x758",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/images/screenshots/SS_4.jpeg",
+      "type": "image/jpeg",
+      "sizes": "413x758",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/images/screenshots/SS_5.jpeg",
+      "type": "image/jpeg",
+      "sizes": "413x758",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/images/screenshots/SS_6.jpeg",
+      "type": "image/jpeg",
+      "sizes": "413x758",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/images/screenshots/SS_7.jpeg",
+      "type": "image/jpeg",
+      "sizes": "1738x922",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/images/screenshots/SS_8.jpeg",
+      "type": "image/jpeg",
+      "sizes": "1738x922",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/images/screenshots/SS_9.jpeg",
+      "type": "image/jpeg",
+      "sizes": "1738x922",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/images/screenshots/SS_10.jpeg",
+      "type": "image/jpeg",
+      "sizes": "1738x922",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/images/screenshots/SS_11.jpeg",
+      "type": "image/jpeg",
+      "sizes": "1738x922",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/images/screenshots/SS_12.jpeg",
+      "type": "image/jpeg",
+      "sizes": "1738x922",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/images/screenshots/SS_13.jpeg",
+      "type": "image/jpeg",
+      "sizes": "1738x922",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/images/screenshots/SS_14.jpeg",
+      "type": "image/jpeg",
+      "sizes": "1738x922",
+      "form_factor": "wide"
+    }
+  ]
+}
