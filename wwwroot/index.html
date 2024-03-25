@@ -9,6 +9,9 @@
     <title>PDF Toolkit</title>
     <base href="/" />
     <link rel="stylesheet" href="css/main.min.css" />
+    <link rel="stylesheet" href="fontawesome/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="fontawesome/css/brands.min.css" />
+    <link rel="stylesheet" href="fontawesome/css/solid.min.css" />
     <meta name="description" content="Various tools for manipulating PDF files." />
     <link rel="shortcut icon" href="favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
@@ -53,6 +56,18 @@
       <a href="" class="reload">Reload</a>
       <a class="dismiss">🗙</a>
     </div> -->
+
+    <!-- Script for downloading a file -->
+    <script type="text/javascript">
+      function downloadFile(fileName, fileUrl) {
+        let link = document.createElement("a");
+        link.download = fileName;
+        link.href = fileUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    </script>
 
     <script src="_framework/blazor.webassembly.js"></script>
     <script>

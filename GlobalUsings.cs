@@ -1,0 +1,1 @@
+global using Blazor.PDF.Toolkit.Models;

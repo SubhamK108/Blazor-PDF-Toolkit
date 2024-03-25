@@ -1,0 +1,9 @@
+<div class="h-screen flex flex-col justify-center items-center text-center">
+    <div class="font-semibold mb-8 max-sm:mb-5 mx-12 text-4xl max-sm:text-[1.8rem] font-sans leading-[3.5rem]">
+        @Core.SubmitMessage
+    </div>
+    @if (Core.SubmitMessage.Length > 0)
+    {
+        <Spinners Size="Large" />
+    }
+</div>

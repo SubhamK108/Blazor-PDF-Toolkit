@@ -1,0 +1,25 @@
+<div class="mt-12 max-sm:mt-9 p-12 h-[25rem] max-sm:h-[18rem] w-[60rem] max-sm:w-[22rem] mx-auto rounded-3xl border-4 border-dashed border-[#074DA6] flex items-center justify-center text-center bg-transparent hover:bg-blue-300 dark:hover:bg-blue-950 text-[1.55rem] max-sm:text-[1.4rem] relative shadow-inner font-sans">
+    <InputFile 
+        class="absolute w-full h-full opacity-0 cursor-pointer" 
+        title="" 
+        multiple="@IsMultiple"
+        accept="@FileType" 
+        OnChange="@(UploadFiles!)"
+    ></InputFile>
+    
+    <div class="flex flex-col justify-center items-center text-center">
+        <i class="text-9xl max-sm:text-8xl mb-8 max-sm:mb-6 fa-solid fa-file-@UploadType!.ToLower()"></i>
+        <div class="text-[1.5rem] max-sm:text-[1.3rem]">
+            <p>Drag & Drop</p>
+            <p>OR</p>
+            <p>Click To Upload</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string? UploadType { get; set; }
+    [Parameter] public bool IsMultiple { get; set; }
+    [Parameter] public string? FileType { get; set; }
+    [Parameter] public Func<InputFileChangeEventArgs, Task>? UploadFiles { get; set; }
+}

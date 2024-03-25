@@ -1,0 +1,59 @@
+<div>
+    <div class="h-[6rem] flex flex-col justify-center items-center mt-14 max-sm:-mt-6 text-[1.7rem] max-sm:text-[1.55rem] font-sans">
+        <div class="font-semibold">
+            @if (UploadType == "PDF")
+            {
+                @if (IsMultipleUpload)
+                {
+                    <p>Upload your PDF files</p>
+                }
+                else
+                {
+                    <p>Upload your PDF file</p>
+                }
+            }
+            else
+            {
+                <p>Upload your Image</p>
+            }
+        </div>
+        <div class="mt-4 max-sm:mt-3 text-xl max-sm:text-[1.2rem]">
+            @if (UploadType == "PDF")
+            {
+                @if (IsMultipleUpload)
+                {
+                    <p>Limit - 20 PDF Files / 20 MB Each</p>
+                }
+                else
+                {
+                    <p>Limit - 1 PDF File / 20 MB</p>
+                }
+            }
+            else
+            {
+                <p>Limit - 1 Image / 20 MB</p>
+            }
+        </div>
+    </div>
+
+    @if (UploadType == "Image")
+    {
+        <div
+            class="max-sm:-mt-[6px] flex flex-col justify-center items-center text-center text-xl max-sm:text-[1.2rem] font-sans">
+            Allowed Formats: PNG, JPG & JPEG
+        </div>
+    }
+
+    <FilePicker 
+        UploadType="@UploadType" 
+        IsMultiple="@IsMultipleUpload"
+        FileType="@(UploadType == "PDF" ? "application/pdf" : "image/png,image/jpg,image/jpeg,image/svg+xml")"
+        UploadFiles="@(UploadFiles!)" 
+    />
+</div>
+
+@code {
+    [Parameter] public string? UploadType { get; set; }
+    [Parameter] public bool IsMultipleUpload { get; set; }
+    [Parameter] public Func<InputFileChangeEventArgs, Task>? UploadFiles { get; set; }
+}
