@@ -1,0 +1,225 @@
+@page "/pdf-merger"
+
+<div hidden="@(!(!Loading && !Core.IsUploadInitiated && !Merger.IsMergeInitiated && !Merger.IsMergeComplete))">
+    <div class="h-full flex flex-col justify-center items-center">
+        <div
+            class="font-bold tracking-wide h-[8rem] flex flex-col justify-center items-center text-center mt-14 max-sm:mt-5 px-2 text-6xl max-sm:text-[2.5rem] font-sans">
+            PDF Merger
+        </div>
+        <div hidden="@(!(!Core.IsUploadInitiated && !Core.IsUploadComplete && !Core.IsUploadFailed))">
+            <UploadContainer UploadType="PDF" IsMultipleUpload="@true" UploadFiles="@UploadFilesInitializer" />
+        </div>
+
+        @if (Core.IsUploadFailed)
+        {
+            <UploadFailedContainer RefreshApp="@RefreshApp" />
+        }
+
+        @if (Core.IsUploadComplete)
+        {
+            <div class="flex flex-col justify-center items-center text-center mt-16 mb-8 max-sm:-mt-4 max-sm:mb-7 text-[1.7rem] max-sm:text-[1.55rem] font-sans">
+                <div>
+                    @if (Merger.UploadedFiles.Count <= 1)
+                    {
+                        <div class="mb-14 max-sm:mb-11">
+                            <p class="font-semibold px-6">@Core.UploadErrorMessage</p>
+                            @if (Core.UploadErrorMessage.Length > 0)
+                            {
+                                <p class="mt-3 text-5xl max-sm:text-[2.2rem]">😕</p>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <div class="mb-8 max-sm:mb-7">
+                                <p class="font-semibold px-6">@Core.UploadMessage</p>
+                            </div>
+                            <table class="table-fixed border-collapse mx-auto mb-8 max-sm:mb-7 text-[1.2rem] max-sm:text-[1.1rem]">
+                                <tbody>
+                                    @foreach (ProcessedFile file in Merger.UploadedFiles)
+                                    {
+                                        <tr key="@file.Id">
+                                            <td class="pb-[0.8rem] max-sm:pb-[0.65rem] text-center pl-4 pr-2">
+                                                <i class="fa-solid fa-file-pdf"></i>
+                                            </td>
+                                            <td class="pb-[0.8rem] max-sm:pb-[0.65rem] pr-4 max-sm:pr-3 text-left">
+                                                @file.FileName
+                                            </td>
+                                            <td class="pb-[0.8rem] max-sm:pb-[0.65rem] text-center pr-4">
+                                                @if (Merger.UploadedFiles.IndexOf(file) > 0)
+                                                {
+                                                    <span 
+                                                        class="px-2 hover:bg-white dark:hover:bg-black hover:text-black dark:hover:text-white rounded-md hover:shadow hover:shadow-[#404756] dark:hover:shadow-[#ffffffa6] p-1 cursor-pointer fa-solid fa-arrow-up"
+                                                        title="Move File Up" 
+                                                        @onclick="() => MoveFileUp(file)"
+                                                    ></span>
+                                                }
+                                                @if (Merger.UploadedFiles.IndexOf(file) < Merger.UploadedFiles.Count - 1)
+                                                {
+                                                    <span
+                                                        class="px-2 hover:bg-white dark:hover:bg-black hover:text-black dark:hover:text-white rounded-md hover:shadow hover:shadow-[#404756] dark:hover:shadow-[#ffffffa6] p-1 cursor-pointer fa-solid fa-arrow-down"
+                                                        title="Move File Down" 
+                                                        @onclick="() => MoveFileDown(file)"
+                                                    ></span>
+                                                }
+                                                <span
+                                                    class="px-2 hover:bg-white dark:hover:bg-black hover:text-black dark:hover:text-white rounded-md hover:shadow hover:shadow-[#404756] dark:hover:shadow-[#ffffffa6] p-1 cursor-pointer fa-solid fa-xmark"
+                                                    title="Remove File" 
+                                                    @onclick="() => RemoveFile(file)"
+                                                ></span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div class="h-[6rem] max-sm:h-[5rem]">
+                                <button
+                                    class="text-3xl max-sm:text-2xl rounded-xl bg-green-700 dark:bg-green-900 hover:bg-green-900 dark:hover:bg-green-950 disabled:bg-zinc-400 dark:disabled:bg-zinc-800 hover:ring hover:ring-green-500 dark:hover:ring-green-700 disabled:ring-transparent dark:disabled:ring-transparent text-gray-200 disabled:text-zinc-300 dark:disabled:text-zinc-600 p-2 h-[4.5rem] w-52 max-sm:h-16 max-sm:w-40"
+                                    @onclick="SubmitFiles"
+                                >
+                                    <i class="fa-solid fa-circle-check mr-3"></i>Merge
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="h-[6rem]">
+                    <button
+                        class="text-3xl max-sm:text-2xl rounded-xl bg-[#074DA6] dark:bg-[#05336E] hover:bg-[#05346e] dark:hover:bg-[#04234D] hover:ring hover:ring-[#0091ff] dark:hover:ring-[#074DA6] text-gray-200 p-2 h-[4.5rem] w-52 max-sm:h-16 max-sm:w-40"
+                        @onclick="RefreshApp"
+                    >
+                        <i class="fa-solid fa-arrow-rotate-right mr-3"></i>Re-Do
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@if (!Loading && Core.IsUploadInitiated && !Core.IsUploadComplete)
+{
+    <UploadStateContainer />
+}
+
+@if (!Loading && Merger.IsMergeInitiated && !Merger.IsMergeComplete)
+{
+    <ActionStateContainer />
+}
+
+@if (!Loading && Merger.IsMergeComplete)
+{
+    <DownloadContainer ToolName="PDF Merger" RefreshApp="@RefreshApp" />
+}
+
+@code {
+    private bool Loading { get; set; } = true;
+
+    protected override void OnInitialized()
+    {
+        RefreshApp();
+        Loading = false;
+    }
+
+    private async Task UploadFilesInitializer(InputFileChangeEventArgs files)
+    {
+        if (files.FileCount == 0)
+        {
+            return;
+        }
+
+        RefreshApp();
+        Core.UploadMessage = "Uploading your PDF file(s)... ⏳";
+        Core.IsUploadInitiated = true;
+
+        await Task.Delay(1000);
+
+        if (files.FileCount > Merger.MaxFilesAllowed)
+        {
+            HandleFailedUpload($"Max {Merger.MaxFilesAllowed} PDF files allowed!");
+            return;
+        }
+
+        foreach (IBrowserFile file in files.GetMultipleFiles())
+        {
+            if (file.Size > Merger.MaxSizeAllowed)
+            {
+                HandleFailedUpload("Max 20 MB size allowed for each file!");
+                return;
+            }
+            if (!file.ContentType.Equals(Merger.FileTypeAllowed))
+            {
+                HandleFailedUpload("You can only upload PDF files!");
+                return;
+            }
+
+            byte[] fileBuffer = new byte[file.Size];
+            await file.OpenReadStream(Merger.MaxSizeAllowed).ReadAsync(fileBuffer);
+            Merger.UploadedFiles.Add(new()
+            {
+                Id = Guid.NewGuid(),
+                Content = fileBuffer,
+                FileName = file.Name
+            });
+        }
+
+        if (Merger.UploadedFiles.Count > 1)
+        {
+            Core.UploadMessage = $"{Merger.UploadedFiles.Count} PDF files uploaded. ✅";
+        }
+        else
+        {
+            Core.UploadErrorMessage = "Just 1 PDF file uploaded, which is not enough! You have to upload at least 2 files.";
+        }
+
+        Core.IsUploadInitiated = false;
+        Core.IsUploadComplete = true;
+    }
+
+    private void RefreshApp()
+    {
+        CoreShared.RefreshCore();
+        MergerCore.RefreshMerger();
+    }
+
+    private void HandleFailedUpload(string uploadErrorMessage)
+    {
+        Core.UploadMessage = "Upload failed! ❌";
+        Core.UploadErrorMessage = uploadErrorMessage;
+        Core.IsUploadInitiated = false;
+        Core.IsUploadFailed = true;
+    }
+
+    private void RemoveFile(ProcessedFile file)
+    {
+        int index = Merger.UploadedFiles.IndexOf(file);
+        Merger.UploadedFiles.RemoveAt(index);
+
+        if (Merger.UploadedFiles.Count > 1)
+        {
+            Core.UploadMessage = $"{Merger.UploadedFiles.Count} PDF files are left. ✅";
+        }
+        else
+        {
+            Core.UploadErrorMessage = "Not enough PDF files left! At least 2 files are needed.";
+        }
+    }
+
+    private void MoveFileUp(ProcessedFile file)
+    {
+        int index = Merger.UploadedFiles.IndexOf(file);
+        Merger.UploadedFiles.RemoveAt(index);
+        Merger.UploadedFiles.Insert(index - 1, file);
+    }
+
+    private void MoveFileDown(ProcessedFile file)
+    {
+        int index = Merger.UploadedFiles.IndexOf(file);
+        Merger.UploadedFiles.RemoveAt(index);
+        Merger.UploadedFiles.Insert(index + 1, file);
+    }
+
+    private void SubmitFiles()
+    {
+    }
+}
