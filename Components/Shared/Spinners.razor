@@ -1,31 +1,38 @@
-@if (Size!.Equals("Small"))
-{
-    <div class="m-4 flex flex-row space-x-4 justify-center items-center">
-    <div
-        class="w-16 h-16 max-sm:w-14 max-sm:h-14 rounded-full animate-spin border-[5.5px] max-sm:border-[4px] border-solid border-current border-t-transparent">
-    </div>
-</div>
-}
-else if (Size!.Equals("Medium"))
+@if (Size == Sizes.SMALL)
 {
     <div class="m-2 flex flex-row space-x-4 justify-center items-center">
-    <div
-        class="w-7 h-7 max-sm:w-5 max-sm:h-5 rounded-full animate-spin border-[3.5px] max-sm:border-[2px] border-solid border-current border-t-transparent">
+        <div
+            class="w-7 h-7 max-sm:w-5 max-sm:h-5 rounded-full animate-spin border-[3.5px] max-sm:border-[2px] border-solid border-current border-t-transparent">
+        </div>
     </div>
-</div>
 }
-else if (Size!.Equals("Large"))
+else if (Size == Sizes.MEDIUN)
 {
     <div class="m-4 flex flex-row space-x-4 justify-center items-center">
-    <div
-        class="w-[5.5rem] h-[5.5rem] max-sm:w-[4.5rem] max-sm:h-[4.5rem] rounded-full animate-spin border-[6.5px] max-sm:border-[5px] border-solid border-current border-t-transparent">
+        <div
+            class="w-16 h-16 max-sm:w-14 max-sm:h-14 rounded-full animate-spin border-[5.5px] max-sm:border-[4px] border-solid border-current border-t-transparent">
+        </div>
     </div>
-</div>
+}
+else if (Size == Sizes.LARGE)
+{
+    <div class="m-4 flex flex-row space-x-4 justify-center items-center">
+        <div
+            class="w-[5.5rem] h-[5.5rem] max-sm:w-[4.5rem] max-sm:h-[4.5rem] rounded-full animate-spin border-[6.5px] max-sm:border-[5px] border-solid border-current border-t-transparent">
+        </div>
+    </div>
 }
 else
 {
 }
 
 @code {
-    [Parameter] public string? Size { get; set; }
+    [Parameter] public Sizes Size { get; set; }
+
+    public enum Sizes
+    {
+        SMALL,
+        MEDIUN,
+        LARGE
+    }
 }
