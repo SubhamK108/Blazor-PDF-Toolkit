@@ -1,8 +1,13 @@
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   content: ["./**/*.{razor,html,cshtml}"],
   theme: {
-    extend: {}
+    extend: {
+      fontFamily: {
+        mono: ["Cascadia Code"]
+      }
+    }
   },
   plugins: []
 };
