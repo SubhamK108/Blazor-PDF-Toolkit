@@ -92,7 +92,7 @@
 
 @if (!Loading && PageExtractor.IsExtractionComplete)
 {
-    <DownloadContainer ToolName="PDF PageExtractor" RefreshApp="@RefreshApp" />
+    <DownloadContainer ToolName="PDF Page Extractor" RefreshApp="@RefreshApp" />
 }
 
 @code {
@@ -126,7 +126,7 @@
         }
         if (!file.ContentType.Equals(PageExtractor.FileTypeAllowed))
         {
-            HandleFailedUpload("You can only upload PDF files!");
+            HandleFailedUpload("You can only upload a PDF file!");
             return;
         }
 
