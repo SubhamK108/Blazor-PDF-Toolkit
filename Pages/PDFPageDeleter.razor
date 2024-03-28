@@ -1,0 +1,217 @@
+@page "/pdf-page-deleter"
+
+<div hidden="@(!(!Loading && !Core.IsUploadInitiated && !PageDeleter.IsDeletionInitiated && !PageDeleter.IsDeletionComplete))">
+    <div class="h-full flex flex-col justify-center items-center">
+        <div
+            class="font-bold tracking-wide h-[8rem] flex flex-col justify-center items-center text-center mt-14 max-sm:mt-5 px-2 text-6xl max-sm:text-[2.5rem] font-sans">
+            PDF Page Deleter
+        </div>
+        <div hidden="@(!(!Core.IsUploadInitiated && !Core.IsUploadComplete && !Core.IsUploadFailed))">
+            <UploadContainer UploadType="PDF" IsMultipleUpload="@false" UploadFiles="@UploadFilesInitializer" />
+        </div>
+
+        @if (Core.IsUploadFailed)
+        {
+            <UploadFailedContainer RefreshApp="@RefreshApp" />
+        }
+
+        @if (Core.IsUploadComplete)
+        {
+            <div class="flex flex-col justify-center items-center text-center mt-16 mb-8 max-sm:-mt-4 max-sm:mb-7 text-[1.7rem] max-sm:text-[1.55rem] font-sans">
+                <div>
+                    <div class="mb-8 max-sm:mb-7">
+                        <p class="font-semibold px-6">@Core.UploadMessage</p>
+                    </div>
+                    <table class="table-fixed border-collapse mx-auto mb-8 max-sm:mb-7 text-[1.2rem] max-sm:text-[1.1rem]">
+                        <tbody>
+                            <tr key=@PageDeleter.UploadedFile!.Id>
+                                <td class="px-4 text-center">
+                                    <i class="text-4xl max-sm:text-3xl mb-2 fa-solid fa-file-pdf"></i>
+                                    <p>@PageDeleter.UploadedFile!.FileName</p>
+                                    <p>@($"({PageDeleter.TotalPages} Pages)")</p>
+                                    <span
+                                        class="hover:bg-white dark:hover:bg-black hover:text-black dark:hover:text-white rounded-md hover:shadow hover:shadow-[#404756] dark:hover:shadow-[#ffffffa6] p-1 cursor-pointer fa-solid fa-xmark mt-2"
+                                        title="Remove File" 
+                                        @onclick="RemoveFile"
+                                    ></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="h-[9.5rem] mb-12 max-sm:mb-10 text-[1.5rem] max-sm:text-[1.25rem]">
+                        <p class="px-6 mb-4">@("Enter the page(s) to delete:")</p>
+                        <input
+                            class="mb-4 border border-[#AEAEAE] rounded-lg font-mono h-auto w-32 max-sm:w-28 mx-auto text-center"
+                            type="text" 
+                            @bind="PageDeleter.PagesToDelete" 
+                            @bind:event="oninput" 
+                            @bind:after="StartDeleterValidator"
+                            placeholder="Page No." 
+                        />
+                        @if (PageDeleter.PagesToDeleteValidator.ToString().Equals("CHECKING"))
+                        {
+                            <Spinner Size="Spinner.Sizes.SMALL" />
+                        }
+                        else
+                        {
+                            <p class="px-6">@PageDeleter.PagesToDeleteInfo</p>
+                        }
+                    </div>
+                    <div class="h-[6rem] max-sm:h-[5rem]">
+                        <button
+                            class="text-3xl max-sm:text-2xl rounded-xl bg-green-700 dark:bg-green-900 hover:bg-green-900 dark:hover:bg-green-950 disabled:bg-zinc-400 dark:disabled:bg-zinc-800 hover:ring hover:ring-green-500 dark:hover:ring-green-700 disabled:ring-transparent dark:disabled:ring-transparent text-gray-200 disabled:text-zinc-300 dark:disabled:text-zinc-600 p-2 h-[4.5rem] w-52 max-sm:h-16 max-sm:w-40"
+                            @onclick="SubmitFile"
+                            disabled="@(PageDeleter.PagesToDeleteValidator.ToString().Equals("VALID") ? false : true)"
+                        >
+                            <i class="fa-solid fa-circle-check mr-3"></i>Delete
+                        </button>
+                    </div>
+                </div>
+                <div class="h-[6rem]">
+                    <button
+                        class="text-3xl max-sm:text-2xl rounded-xl bg-[#074DA6] dark:bg-[#05336E] hover:bg-[#05346e] dark:hover:bg-[#04234D] hover:ring hover:ring-[#0091ff] dark:hover:ring-[#074DA6] text-gray-200 p-2 h-[4.5rem] w-52 max-sm:h-16 max-sm:w-40"
+                        @onclick="RefreshApp"
+                    >
+                        <i class="fa-solid fa-arrow-rotate-right mr-3"></i>Re-Do
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@if (!Loading && Core.IsUploadInitiated && !Core.IsUploadComplete)
+{
+    <UploadStateContainer />
+}
+
+@if (!Loading && PageDeleter.IsDeletionInitiated && !PageDeleter.IsDeletionComplete)
+{
+    <ActionStateContainer />
+}
+
+@if (!Loading && PageDeleter.IsDeletionComplete)
+{
+    <DownloadContainer ToolName="PDF Page Deleter" RefreshApp="@RefreshApp" />
+}
+
+@code {
+    private Timer? _timer = null;
+    private bool Loading { get; set; } = true;
+
+    protected override void OnInitialized()
+    {
+        RefreshApp();
+        Loading = false;
+    }
+
+    private async Task UploadFilesInitializer(InputFileChangeEventArgs files)
+    {
+        if (files.FileCount == 0)
+        {
+            return;
+        }
+
+        RefreshApp();
+        Core.UploadMessage = "Uploading your PDF file(s)... ⏳";
+        Core.IsUploadInitiated = true;
+
+        await Task.Delay(1000);
+
+        IBrowserFile file = files.File;
+        if (file.Size > PageDeleter.MaxSizeAllowed)
+        {
+            HandleFailedUpload("Max 20 MB size allowed for the PDF file!");
+            return;
+        }
+        if (!file.ContentType.Equals(PageDeleter.FileTypeAllowed))
+        {
+            HandleFailedUpload("You can only upload a PDF file!");
+            return;
+        }
+
+        byte[] fileBuffer = new byte[file.Size];
+        await file.OpenReadStream(PageDeleter.MaxSizeAllowed).ReadAsync(fileBuffer);
+        PageDeleter.TotalPages = 3;
+        PageDeleter.UploadedFile = new()
+        {
+            Id = Guid.NewGuid(),
+            Content = fileBuffer,
+            FileName = file.Name
+        };
+
+        if (PageDeleter.TotalPages == 1)
+        {
+            HandleFailedUpload("That PDF file has only 1 page, which is not enough! It must have at least 2 pages.");
+            return;
+        }
+
+        Core.UploadMessage = "PDF file uploaded. ✅";
+        Core.IsUploadInitiated = false;
+        Core.IsUploadComplete = true;
+    }
+
+    private void RefreshApp()
+    {
+        CoreShared.RefreshCore();
+        PageDeleterCore.RefreshPageDeleter();
+    }
+
+    private void HandleFailedUpload(string uploadErrorMessage)
+    {
+        Core.UploadMessage = "Upload failed! ❌";
+        Core.UploadErrorMessage = uploadErrorMessage;
+        Core.IsUploadInitiated = false;
+        Core.IsUploadFailed = true;
+    }
+
+    private void RemoveFile()
+    {
+        Core.IsUploadComplete = false;
+        Core.IsUploadFailed = true;
+        Core.UploadMessage = "PDF file deleted.";
+        Core.UploadErrorMessage = "You have to upload again.";
+        PageDeleter.UploadedFile = null;
+        PageDeleter.TotalPages = 0;
+    }
+
+    private void StartDeleterValidator()
+    {
+        _timer?.Dispose();
+
+        if (PageDeleter.PagesToDelete.Equals(""))
+        {
+            PageDeleter.TotalPagesToDelete = 0;
+            PageDeleter.PagesToDeleteInfo = "(Format/Examples: 2 or 3,7 or 15-30)";
+            PageDeleter.PagesToDeleteValidator = PageDeleter.ValidatorStates.EMPTY;
+        }
+        else
+        {
+            PageDeleter.PagesToDeleteValidator = PageDeleter.ValidatorStates.CHECKING;
+            _timer = new((obj) =>
+            {
+                ValidateDeleter();
+                _timer!.Dispose();
+            },
+            null, 850, Timeout.Infinite);
+        }
+    }
+
+    private void ValidateDeleter()
+    {
+        var validatorResult = PageDeleterValidator.ValidatePagesToDelete(
+        PageDeleter.PagesToDelete,
+        PageDeleter.TotalPages
+        );
+
+        PageDeleter.TotalPagesToDelete = validatorResult.Item2;
+        PageDeleter.PagesToDeleteInfo = validatorResult.Item3;
+        PageDeleter.PagesToDeleteValidator = validatorResult.Item1;
+
+        StateHasChanged();
+    }
+
+    private void SubmitFile()
+    {
+    }
+}
