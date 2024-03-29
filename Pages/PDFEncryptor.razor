@@ -130,25 +130,25 @@
 
         await Task.Delay(1000);
 
-        IBrowserFile file = files.File;
-        if (file.Size > Encryptor.MaxSizeAllowed)
+        IBrowserFile uploadedFile = files.File;
+        if (uploadedFile.Size > Encryptor.MaxSizeAllowed)
         {
             HandleFailedUpload("Max 20 MB size allowed for the PDF file!");
             return;
         }
-        if (!file.ContentType.Equals(Encryptor.FileTypeAllowed))
+        if (!uploadedFile.ContentType.Equals(Encryptor.FileTypeAllowed))
         {
             HandleFailedUpload("You can only upload a PDF file!");
             return;
         }
 
-        byte[] fileBuffer = new byte[file.Size];
-        await file.OpenReadStream(Encryptor.MaxSizeAllowed).ReadAsync(fileBuffer);
+        byte[] fileBuffer = new byte[uploadedFile.Size];
+        await uploadedFile.OpenReadStream(Encryptor.MaxSizeAllowed).ReadAsync(fileBuffer);
         Encryptor.UploadedFile = new()
         {
             Id = Guid.NewGuid(),
             Content = fileBuffer,
-            FileName = file.Name
+            FileName = uploadedFile.Name
         };
 
         Core.UploadMessage = "PDF file uploaded. ✅";

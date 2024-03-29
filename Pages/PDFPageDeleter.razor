@@ -121,26 +121,26 @@
 
         await Task.Delay(1000);
 
-        IBrowserFile file = files.File;
-        if (file.Size > PageDeleter.MaxSizeAllowed)
+        IBrowserFile uploadedFile = files.File;
+        if (uploadedFile.Size > PageDeleter.MaxSizeAllowed)
         {
             HandleFailedUpload("Max 20 MB size allowed for the PDF file!");
             return;
         }
-        if (!file.ContentType.Equals(PageDeleter.FileTypeAllowed))
+        if (!uploadedFile.ContentType.Equals(PageDeleter.FileTypeAllowed))
         {
             HandleFailedUpload("You can only upload a PDF file!");
             return;
         }
 
-        byte[] fileBuffer = new byte[file.Size];
-        await file.OpenReadStream(PageDeleter.MaxSizeAllowed).ReadAsync(fileBuffer);
+        byte[] fileBuffer = new byte[uploadedFile.Size];
+        await uploadedFile.OpenReadStream(PageDeleter.MaxSizeAllowed).ReadAsync(fileBuffer);
         PageDeleter.TotalPages = 3;
         PageDeleter.UploadedFile = new()
         {
             Id = Guid.NewGuid(),
             Content = fileBuffer,
-            FileName = file.Name
+            FileName = uploadedFile.Name
         };
 
         if (PageDeleter.TotalPages == 1)

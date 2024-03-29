@@ -143,26 +143,26 @@
             return;
         }
 
-        foreach (IBrowserFile file in files.GetMultipleFiles())
+        foreach (IBrowserFile uploadedFile in files.GetMultipleFiles())
         {
-            if (file.Size > Merger.MaxSizeAllowed)
+            if (uploadedFile.Size > Merger.MaxSizeAllowed)
             {
                 HandleFailedUpload("Max 20 MB size allowed for each file!");
                 return;
             }
-            if (!file.ContentType.Equals(Merger.FileTypeAllowed))
+            if (!uploadedFile.ContentType.Equals(Merger.FileTypeAllowed))
             {
                 HandleFailedUpload("You can only upload PDF files!");
                 return;
             }
 
-            byte[] fileBuffer = new byte[file.Size];
-            await file.OpenReadStream(Merger.MaxSizeAllowed).ReadAsync(fileBuffer);
+            byte[] fileBuffer = new byte[uploadedFile.Size];
+            await uploadedFile.OpenReadStream(Merger.MaxSizeAllowed).ReadAsync(fileBuffer);
             Merger.UploadedFiles.Add(new()
             {
                 Id = Guid.NewGuid(),
                 Content = fileBuffer,
-                FileName = file.Name
+                FileName = uploadedFile.Name
             });
         }
 
