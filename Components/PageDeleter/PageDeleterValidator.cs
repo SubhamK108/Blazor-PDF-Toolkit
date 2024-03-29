@@ -2,7 +2,7 @@ namespace Blazor.PDF.Toolkit.Components.PageDeleter;
 
 using PageDeleterValidatorResult = (PageDeleter.ValidatorStates, int, string);
 
-class PageDeleterValidator
+public class PageDeleterValidator
 {
     public static PageDeleterValidatorResult ValidatePagesToDelete(string pagesToDelete, int totalPages)
     {

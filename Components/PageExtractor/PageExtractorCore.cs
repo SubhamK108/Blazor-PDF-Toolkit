@@ -1,6 +1,6 @@
 namespace Blazor.PDF.Toolkit.Components.PageExtractor;
 
-class PageExtractorCore
+public class PageExtractorCore
 {
     public static void RefreshPageExtractor()
     {

@@ -1,6 +1,6 @@
 namespace Blazor.PDF.Toolkit.Components.PageDeleter;
 
-class PageDeleterCore
+public class PageDeleterCore
 {
     public static void RefreshPageDeleter()
     {

@@ -7,7 +7,11 @@
             PDF Merger
         </div>
         <div hidden="@(!(!Core.IsUploadInitiated && !Core.IsUploadComplete && !Core.IsUploadFailed))">
-            <UploadContainer UploadType="PDF" IsMultipleUpload="@true" UploadFiles="@UploadFilesInitializer" />
+            <UploadContainer 
+                UploadType="Core.UploadTypes.PDF" 
+                IsMultipleUpload="@true" 
+                UploadFiles="@UploadFilesInitializer" 
+            />
         </div>
 
         @if (Core.IsUploadFailed)

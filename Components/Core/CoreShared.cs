@@ -1,6 +1,6 @@
 namespace Blazor.PDF.Toolkit.Components.Core;
 
-class CoreShared
+public class CoreShared
 {
     public static void RefreshCore()
     {

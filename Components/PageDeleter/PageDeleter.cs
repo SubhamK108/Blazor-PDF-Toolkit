@@ -1,6 +1,6 @@
 namespace Blazor.PDF.Toolkit.Components.PageDeleter;
 
-class PageDeleter
+public class PageDeleter
 {
     public static ProcessedFile? UploadedFile { get; set; } = null;
     public static int TotalPages { get; set; } = 0;

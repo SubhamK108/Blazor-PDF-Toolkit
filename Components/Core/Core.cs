@@ -1,6 +1,6 @@
 namespace Blazor.PDF.Toolkit.Components.Core;
 
-class Core
+public class Core
 {
     public static bool IsUploadComplete { get; set; } = false;
     public static bool IsUploadInitiated { get; set; } = false;
@@ -11,4 +11,10 @@ class Core
     public static string DownloadMessage { get; set; } = string.Empty;
     public static string FinalPdfFilename { get; set; } = string.Empty;
     public static string FinalPdfUrl { get; set; } = string.Empty;
+
+    public enum UploadTypes
+    {
+        PDF,
+        IMAGE
+    }
 }

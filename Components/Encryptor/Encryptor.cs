@@ -1,6 +1,6 @@
 namespace Blazor.PDF.Toolkit.Components.Encryptor;
 
-class Encryptor
+public class Encryptor
 {
     public static ProcessedFile? UploadedFile { get; set; } = null;
     public static string Password { get; set; } = "";

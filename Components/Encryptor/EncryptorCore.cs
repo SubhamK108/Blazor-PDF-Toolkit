@@ -1,6 +1,6 @@
 namespace Blazor.PDF.Toolkit.Components.Encryptor;
 
-class EncryptorCore
+public class EncryptorCore
 {
     public static void RefreshEncryptor()
     {

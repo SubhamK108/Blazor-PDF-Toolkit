@@ -1,6 +1,6 @@
 namespace Blazor.PDF.Toolkit.Components.Merger;
 
-class Merger
+public class Merger
 {
     public static List<ProcessedFile> UploadedFiles { get; set; } = [];
     public static bool IsMergeComplete { get; set; } = false;

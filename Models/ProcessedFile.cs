@@ -1,6 +1,6 @@
 namespace Blazor.PDF.Toolkit.Models;
 
-class ProcessedFile
+public class ProcessedFile
 {
     public Guid Id { get; set; }
     public string? FileName { get; set; }

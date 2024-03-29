@@ -1,6 +1,6 @@
 namespace Blazor.PDF.Toolkit.Components.PageExtractor;
 
-class PageExtractor
+public class PageExtractor
 {
     public static ProcessedFile? UploadedFile { get; set; }
     public static int TotalPages { get; set; } = 0;

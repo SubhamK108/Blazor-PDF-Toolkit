@@ -1,10 +1,8 @@
 namespace Blazor.PDF.Toolkit.Components.PageExtractor;
 
-using PageExtractorValidatorResult = (PageExtractor.ValidatorStates, int, string);
-
-class PageExtractorValidator
+public class PageExtractorValidator
 {
-    public static PageExtractorValidatorResult ValidatePagesToExtract(string pagesToExtract, int totalPages)
+    public static (PageExtractor.ValidatorStates, int, string) ValidatePagesToExtract(string pagesToExtract, int totalPages)
     {
         const string REGEX1 = @"^([1-9])(\d*)$"; // RegEx for a Single Number
         const string REGEX2 = @"^([1-9])((\,(([1-9])(\d*)))+)$"; // RegEx for Multiple Numbers Separated by ','

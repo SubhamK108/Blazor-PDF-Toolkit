@@ -6,9 +6,9 @@
         accept="@FileType" 
         OnChange="@(UploadFiles!)"
     ></InputFile>
-    
+
     <div class="flex flex-col justify-center items-center text-center">
-        <i class="text-9xl max-sm:text-8xl mb-8 max-sm:mb-6 fa-solid fa-file-@UploadType!.ToLower()"></i>
+        <i class="text-9xl max-sm:text-8xl mb-8 max-sm:mb-6 fa-solid fa-file-@UploadType.ToString().ToLower()"></i>
         <div class="text-[1.5rem] max-sm:text-[1.3rem]">
             <p>Drag & Drop</p>
             <p>OR</p>
@@ -18,7 +18,7 @@
 </div>
 
 @code {
-    [Parameter] public string? UploadType { get; set; }
+    [Parameter] public Core.UploadTypes UploadType { get; set; }
     [Parameter] public bool IsMultiple { get; set; }
     [Parameter] public string? FileType { get; set; }
     [Parameter] public Func<InputFileChangeEventArgs, Task>? UploadFiles { get; set; }

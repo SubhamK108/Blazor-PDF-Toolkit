@@ -1,7 +1,7 @@
 <div>
     <div class="h-[6rem] flex flex-col justify-center items-center mt-14 max-sm:-mt-6 text-[1.7rem] max-sm:text-[1.55rem] font-sans">
         <div class="font-semibold">
-            @if (UploadType == "PDF")
+            @if (UploadType == Core.UploadTypes.PDF)
             {
                 @if (IsMultipleUpload)
                 {
@@ -18,7 +18,7 @@
             }
         </div>
         <div class="mt-4 max-sm:mt-3 text-xl max-sm:text-[1.2rem]">
-            @if (UploadType == "PDF")
+            @if (UploadType == Core.UploadTypes.PDF)
             {
                 @if (IsMultipleUpload)
                 {
@@ -36,10 +36,9 @@
         </div>
     </div>
 
-    @if (UploadType == "Image")
+    @if (UploadType == Core.UploadTypes.IMAGE)
     {
-        <div
-            class="max-sm:-mt-[6px] flex flex-col justify-center items-center text-center text-xl max-sm:text-[1.2rem] font-sans">
+        <div class="max-sm:-mt-[6px] flex flex-col justify-center items-center text-center text-xl max-sm:text-[1.2rem] font-sans">
             Allowed Formats: PNG, JPG & JPEG
         </div>
     }
@@ -47,13 +46,13 @@
     <FilePicker 
         UploadType="@UploadType" 
         IsMultiple="@IsMultipleUpload"
-        FileType="@(UploadType == "PDF" ? "application/pdf" : "image/png,image/jpg,image/jpeg,image/svg+xml")"
+        FileType="@(UploadType == Core.UploadTypes.PDF ? "application/pdf" : "image/png,image/jpg,image/jpeg,image/svg+xml")"
         UploadFiles="@(UploadFiles!)" 
     />
 </div>
 
 @code {
-    [Parameter] public string? UploadType { get; set; }
+    [Parameter] public Core.UploadTypes UploadType { get; set; }
     [Parameter] public bool IsMultipleUpload { get; set; }
     [Parameter] public Func<InputFileChangeEventArgs, Task>? UploadFiles { get; set; }
 }
