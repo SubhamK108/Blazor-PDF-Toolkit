@@ -1,0 +1,164 @@
+@page "/image-to-pdf"
+@inject IJSRuntime JS
+
+<div hidden="@(!(!Loading && !Core.IsUploadInitiated && !ImageConverter.IsConversionInitiated && !ImageConverter.IsConversionComplete))">
+    <div class="h-full flex flex-col justify-center items-center">
+        <div class="font-bold tracking-wide h-[8rem] flex flex-col justify-center items-center text-center max-sm:mb-5 mt-14 max-sm:mt-5 px-2 text-6xl max-sm:text-[2.5rem] font-sans">
+            Image To PDF Converter
+        </div>
+        <div hidden="@(!(!Core.IsUploadInitiated && !Core.IsUploadComplete && !Core.IsUploadFailed))">
+            <UploadContainer 
+                UploadType="Core.UploadTypes.IMAGE" 
+                IsMultipleUpload="@false"
+                UploadFiles="@UploadFilesInitializer" 
+            />
+        </div>
+
+        @if (Core.IsUploadFailed)
+        {
+            <UploadFailedContainer RefreshApp="@RefreshApp" />
+        }
+
+        @if (Core.IsUploadComplete)
+        {
+            <div class="flex flex-row max-sm:flex-col justify-center items-center text-center mt-16 max-sm:-mt-4 mb-14 text-[1.7rem] max-sm:text-[1.55rem] font-sans">
+                <div class="mx-12 max-sm:mb-8">
+                    <p class="font-semibold px-6 mb-5">@Core.UploadMessage</p>
+                    <div class="flex justify-center items-center text-center mb-5">
+                        <img 
+                            src="@(ImageConverter.PreviewImageUrl)" 
+                            alt="@(ImageConverter.UploadedImage!.FileName)"
+                            width="@(800)" 
+                            height="@(800)" 
+                            loading="eager"
+                            class="@($"rounded-3xl shadow-lg shadow-[#404756] dark:shadow-none dark:border-2 dark:border-[#ffffffa6] {(ImageConverter.ImageOrientation == ImageConverter.ImageOrientations.LANDSCAPE ? "w-[600px] max-sm:w-64" : "w-80 max-sm:w-32")}")" 
+                        />
+                    </div>
+                    <p class="text-[1.3rem] max-sm:text-[1.1rem]">@ImageConverter.UploadedImage!.FileName</p>
+                    <span
+                        class="hover:bg-white dark:hover:bg-black hover:text-black dark:hover:text-white rounded-md hover:shadow hover:shadow-[#404756] dark:hover:shadow-[#ffffffa6] p-1 cursor-pointer fa-solid fa-xmark text-[1.5rem] max-sm:text-[1.3rem] mt-1"
+                        title="Remove Image" 
+                        @onclick="RemoveImage"
+                    ></span>
+                </div>
+                <div class="flex-col mx-12 max-sm:mx-0">
+                    <div class="h-[6rem] max-sm:h-[5rem]">
+                        <button
+                            class="text-3xl max-sm:text-2xl rounded-xl bg-green-700 dark:bg-green-900 hover:bg-green-900 dark:hover:bg-green-950 disabled:bg-zinc-400 dark:disabled:bg-zinc-800 hover:ring hover:ring-green-500 dark:hover:ring-green-700 disabled:ring-transparent dark:disabled:ring-transparent text-gray-200 disabled:text-zinc-300 dark:disabled:text-zinc-600 p-2 h-[4.5rem] w-52 max-sm:h-16 max-sm:w-40"
+                            @onclick="SubmitImage"
+                        >
+                            <i class="fa-solid fa-circle-check mr-3"></i>Convert
+                        </button>
+                    </div>
+                    <div class="h-[6rem]">
+                        <button
+                            class="text-3xl max-sm:text-2xl rounded-xl bg-[#074DA6] dark:bg-[#05336E] hover:bg-[#05346e] dark:hover:bg-[#04234D] hover:ring hover:ring-[#0091ff] dark:hover:ring-[#074DA6] text-gray-200 p-2 h-[4.5rem] w-52 max-sm:h-16 max-sm:w-40"
+                            @onclick="RefreshApp"
+                        >
+                            <i class="fa-solid fa-arrow-rotate-right mr-3"></i>Re-Do
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@if (!Loading && Core.IsUploadInitiated && !Core.IsUploadComplete)
+{
+    <UploadStateContainer />
+}
+
+@if (!Loading && ImageConverter.IsConversionInitiated && !ImageConverter.IsConversionComplete)
+{
+    <ActionStateContainer />
+}
+
+@if (!Loading && ImageConverter.IsConversionComplete)
+{
+    <DownloadContainer ToolName="Image To PDF Converter" RefreshApp="@RefreshApp" />
+}
+
+@code {
+    private bool Loading { get; set; } = true;
+
+    protected override void OnInitialized()
+    {
+        RefreshApp();
+        Loading = false;
+    }
+
+    private async Task UploadFilesInitializer(InputFileChangeEventArgs files)
+    {
+        if (files.FileCount == 0)
+        {
+            return;
+        }
+
+        RefreshApp();
+        Core.UploadMessage = "Uploading your Image... ⏳";
+        Core.IsUploadInitiated = true;
+
+        await Task.Delay(1000);
+
+        IBrowserFile uploadedImage = files.File;
+        string uploadedImageType = uploadedImage.ContentType;
+        if (uploadedImage.Size > ImageConverter.MaxSizeAllowed)
+        {
+            HandleFailedUpload("Max 20 MB size allowed for the Image!");
+            return;
+        }
+        if (!Array.Exists(ImageConverter.ImageTypesAllowed, type => type.Equals(uploadedImageType)))
+        {
+            HandleFailedUpload("You can only upload an Image!");
+            return;
+        }
+
+        byte[] imageBuffer = new byte[uploadedImage.Size];
+        await uploadedImage.OpenReadStream(ImageConverter.MaxSizeAllowed).ReadAsync(imageBuffer);
+
+        ImageConverter.PreviewImageUrl = await JS.InvokeAsync<string>("getBlobObjectUrl", imageBuffer, uploadedImageType);
+        ImageConverter.ImageOrientation = await JS.InvokeAsync<string>("getImageOrientation", imageBuffer) switch
+        {
+            "Landscape" => ImageConverter.ImageOrientations.LANDSCAPE,
+            _ => ImageConverter.ImageOrientations.PORTRAIT
+        };
+        ImageConverter.UploadedImage = new()
+        {
+            Id = Guid.NewGuid(),
+            Content = imageBuffer,
+            FileName = uploadedImage.Name
+        };
+
+        Core.UploadMessage = "Image uploaded. ✅";
+        Core.IsUploadInitiated = false;
+        Core.IsUploadComplete = true;
+    }
+
+    private void RefreshApp()
+    {
+        CoreShared.RefreshCore();
+        ImageConverterCore.RefreshImageConverter();
+    }
+
+    private void HandleFailedUpload(string uploadErrorMessage)
+    {
+        Core.UploadMessage = "Upload failed! ❌";
+        Core.UploadErrorMessage = uploadErrorMessage;
+        Core.IsUploadInitiated = false;
+        Core.IsUploadFailed = true;
+    }
+
+    private void RemoveImage()
+    {
+        Core.IsUploadComplete = false;
+        Core.IsUploadFailed = true;
+        Core.UploadMessage = "Image deleted.";
+        Core.UploadErrorMessage = "You have to upload again.";
+        ImageConverter.UploadedImage = null;
+    }
+
+    private void SubmitImage()
+    {
+    }
+}

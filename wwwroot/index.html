@@ -69,6 +69,29 @@
       }
     </script>
 
+    <!-- Script for getting the orientation of an image -->
+    <script type="text/javascript">
+      async function getImageOrientation(imageBuffer) {
+        const bmpImage = await createImageBitmap(new Blob([imageBuffer]));
+        const width = bmpImage.width;
+        const height = bmpImage.height;
+        bmpImage.close();
+
+        if (width > height) {
+          return "Landscape";
+        } else {
+          return "Portrait";
+        }
+      }
+    </script>
+
+    <!-- Script for getting the Blob Object URL of a file -->
+    <script type="text/javascript">
+      function getBlobObjectUrl(imageBuffer, imageType) {
+        return URL.createObjectURL(new Blob([imageBuffer], { type: imageType }));
+      }
+    </script>
+
     <script src="_framework/blazor.webassembly.js"></script>
     <script>
       navigator.serviceWorker.register("service-worker.js");
