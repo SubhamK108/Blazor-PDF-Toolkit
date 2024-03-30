@@ -87,8 +87,8 @@
 
     <!-- Script for getting the Blob Object URL of a file -->
     <script type="text/javascript">
-      function getBlobObjectUrl(imageBuffer, imageType) {
-        return URL.createObjectURL(new Blob([imageBuffer], { type: imageType }));
+      function getBlobObjectUrl(fileBuffer, fileType) {
+        return URL.createObjectURL(new Blob([fileBuffer], { type: fileType }));
       }
     </script>
 
