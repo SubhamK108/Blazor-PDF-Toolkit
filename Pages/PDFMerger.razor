@@ -222,7 +222,16 @@
         Merger.UploadedFiles.Insert(index + 1, file);
     }
 
-    private void SubmitFiles()
+    private async void SubmitFiles()
     {
+        Core.SubmitMessage = $"Merging {Merger.UploadedFiles.Count} PDF files... ⏳";
+        Merger.IsMergeInitiated = true;
+
+        await Task.Delay(1000);
+        MergerCore.MergePdfs();
+
+        Core.DownloadMessage = $"Successfully Merged {Merger.UploadedFiles.Count} PDF files. ✅";
+        Merger.IsMergeComplete = true;
+        StateHasChanged();
     }
 }
