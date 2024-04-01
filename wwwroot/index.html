@@ -57,18 +57,6 @@
       <a class="dismiss">🗙</a>
     </div> -->
 
-    <!-- Script for downloading a file -->
-    <script type="text/javascript">
-      function downloadFile(fileName, fileUrl) {
-        let link = document.createElement("a");
-        link.download = fileName;
-        link.href = fileUrl;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    </script>
-
     <!-- Script for getting the orientation of an image -->
     <script type="text/javascript">
       async function getImageOrientation(imageBuffer) {
