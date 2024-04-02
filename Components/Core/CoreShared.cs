@@ -2,6 +2,14 @@ namespace Blazor.PDF.Toolkit.Components.Core;
 
 public class CoreShared
 {
+    public static int GetTotalPagesFromPdf(byte[] fileBuffer)
+    {
+        PdfDocument pdfDocument = new(new PdfReader(new MemoryStream(fileBuffer)));
+        int totalPages = pdfDocument.GetNumberOfPages();
+        pdfDocument.Close();
+        return totalPages;
+    }
+
     public static void RefreshCore()
     {
         Core.IsUploadComplete = false;

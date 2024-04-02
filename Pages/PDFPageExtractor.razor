@@ -135,7 +135,7 @@
 
         byte[] fileBuffer = new byte[uploadedFile.Size];
         await uploadedFile.OpenReadStream(PageExtractor.MaxSizeAllowed).ReadAsync(fileBuffer);
-        PageExtractor.TotalPages = 3;
+        PageExtractor.TotalPages = CoreShared.GetTotalPagesFromPdf(fileBuffer);
         PageExtractor.UploadedFile = new()
         {
             Id = Guid.NewGuid(),
@@ -214,7 +214,26 @@
         StateHasChanged();
     }
 
-    private void SubmitFile()
+    private async Task SubmitFile()
     {
+        Core.SubmitMessage = PageExtractor.TotalPagesToExtract switch
+        {
+            1 => "Extracting 1 Page from the PDF file... ⏳",
+            (> 1) => $"Extracting {PageExtractor.TotalPagesToExtract} Pages from the PDF file... ⏳",
+            _ => ""
+        };
+        PageExtractor.IsExtractionInitiated = true;
+
+        await Task.Delay(1000);
+        PageExtractorCore.ExtractPagesFromPdf();
+
+        Core.DownloadMessage = PageExtractor.TotalPagesToExtract switch
+        {
+            1 => "Successfully Extracted 1 Page from the PDF File. ✅",
+            (> 1) => $"Successfully Extracted {PageExtractor.TotalPagesToExtract} Pages from the PDF File. ✅",
+            _ => ""
+        };
+        PageExtractor.IsExtractionComplete = true;
+        StateHasChanged();
     }
 }
