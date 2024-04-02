@@ -135,7 +135,7 @@
 
         byte[] fileBuffer = new byte[uploadedFile.Size];
         await uploadedFile.OpenReadStream(PageDeleter.MaxSizeAllowed).ReadAsync(fileBuffer);
-        PageDeleter.TotalPages = 3;
+        PageDeleter.TotalPages = CoreShared.GetTotalPagesFromPdf(fileBuffer);
         PageDeleter.UploadedFile = new()
         {
             Id = Guid.NewGuid(),
@@ -214,7 +214,26 @@
         StateHasChanged();
     }
 
-    private void SubmitFile()
+    private async Task SubmitFile()
     {
+        Core.SubmitMessage = PageDeleter.TotalPagesToDelete switch
+        {
+            1 => "Deleting 1 Page from the PDF file... ⏳",
+            (> 1) => $"Deleting {PageDeleter.TotalPagesToDelete} Pages from the PDF file... ⏳",
+            _ => ""
+        };
+        PageDeleter.IsDeletionInitiated = true;
+
+        await Task.Delay(1000);
+        PageDeleterCore.DeletePagesFromPdf();
+
+        Core.DownloadMessage = PageDeleter.TotalPagesToDelete switch
+        {
+            1 => "Successfully Deleted 1 Page from the PDF File. ✅",
+            (> 1) => $"Successfully Deleted {PageDeleter.TotalPagesToDelete} Pages from the PDF File. ✅",
+            _ => ""
+        };
+        PageDeleter.IsDeletionComplete = true;
+        StateHasChanged();
     }
 }
