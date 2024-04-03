@@ -1,41 +1,88 @@
 <!DOCTYPE html>
-<html>
+<html class="max-w-[100vw] overflow-x-hidden" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>PDF Toolkit</title>
+    <base href="/" />
+    <link rel="stylesheet" href="css/main.min.css" />
+    <link rel="stylesheet" href="fontawesome/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="fontawesome/css/brands.min.css" />
+    <link rel="stylesheet" href="fontawesome/css/solid.min.css" />
+    <meta name="description" content="Various tools for manipulating PDF files." />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:url" content="https://blazor-pdftoolkit.subhamk.com" />
+    <meta name="twitter:title" content="PDF Toolkit" />
+    <meta name="twitter:description" content="Various tools for manipulating PDF files." />
+    <meta name="twitter:image" content="https://blazor-pdftoolkit.subhamk.com/android-chrome-512x512.png" />
+    <meta name="twitter:creator" content="@SubhamK108" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="PDF Toolkit" />
+    <meta property="og:description" content="Various tools for manipulating PDF files." />
+    <meta property="og:site_name" content="PDF Toolkit" />
+    <meta property="og:url" content="https://blazor-pdftoolkit.subhamk.com" />
+    <meta property="og:image" content="https://blazor-pdftoolkit.subhamk.com/android-chrome-512x512.png" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F3F5" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#181818" />
+  </head>
 
-<head>
-    <meta charset="utf-8">
-    <title>Single Page Apps for GitHub Pages</title>
+  <body class="max-w-[100vw] overflow-x-hidden bg-[#F2F3F5] dark:bg-[#181818] text-[#404756] dark:text-[#ffffffa6]">
+    <div id="app">
+      <div class="h-screen flex flex-col justify-center items-center">
+        <img
+          class="mb-16 max-sm:mb-12 w-[250px] max-sm:w-[150px] h-auto"
+          src="android-chrome-512x512.png"
+          alt="PDF Toolkit App Icon"
+        />
+
+        <div class="m-4 flex flex-row space-x-4 justify-center items-center">
+          <div
+            class="w-[5.5rem] h-[5.5rem] max-sm:w-[4.5rem] max-sm:h-[4.5rem] rounded-full animate-spin border-[6.5px] max-sm:border-[5px] border-solid border-current border-t-transparent"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div id="blazor-error-ui">
+      An unhandled error has occurred.
+      <a href="" class="reload">Reload</a>
+      <a class="dismiss">🗙</a>
+    </div> -->
+
+    <!-- Script for getting the orientation of an image -->
     <script type="text/javascript">
-        // Single Page Apps for GitHub Pages
-        // https://github.com/rafrex/spa-github-pages
-        // Copyright (c) 2016 Rafael Pedicini, licensed under the MIT License
-        // ----------------------------------------------------------------------
-        // This script takes the current url and converts the path and query
-        // string into just a query string, and then redirects the browser
-        // to the new url with only a query string and hash fragment,
-        // e.g. http://www.foo.tld/one/two?a=b&c=d#qwe, becomes
-        // http://www.foo.tld/?p=/one/two&q=a=b~and~c=d#qwe
-        // Note: this 404.html file must be at least 512 bytes for it to work
-        // with Internet Explorer (it is currently > 512 bytes)
-        // If you're creating a Project Pages site and NOT using a custom domain,
-        // then set segmentCount to 1 (enterprise users may need to set it to > 1).
-        // This way the code will only replace the route part of the path, and not
-        // the real directory in which the app resides, for example:
-        // https://username.github.io/repo-name/one/two?a=b&c=d#qwe becomes
-        // https://username.github.io/repo-name/?p=/one/two&q=a=b~and~c=d#qwe
-        // Otherwise, leave segmentCount as 0.
-        var segmentCount = 1;
-        var l = window.location;
-        l.replace(
-            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-            l.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/?p=/' +
-            l.pathname.slice(1).split('/').slice(segmentCount).join('/').replace(/&/g, '~and~') +
-            (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-            l.hash
-        );
+      async function getImageDimensions(imageBuffer) {
+        const bmpImage = await createImageBitmap(new Blob([imageBuffer]));
+        const imgWidth = bmpImage.width;
+        const imgHeight = bmpImage.height;
+        bmpImage.close();
+
+        if (imgWidth > imgHeight) {
+          return [`${imgWidth}`, `${imgHeight}`, "Landscape"];
+        } else {
+          return [`${imgWidth}`, `${imgHeight}`, "Portrait"];
+        }
+      }
     </script>
-</head>
 
-<body>
-</body>
+    <!-- Script for getting the Blob Object URL of a file -->
+    <script type="text/javascript">
+      function getBlobObjectUrl(fileBuffer, fileType) {
+        return URL.createObjectURL(new Blob([fileBuffer], { type: fileType }));
+      }
+    </script>
 
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script>
+      navigator.serviceWorker.register("service-worker.js");
+    </script>
+  </body>
 </html>

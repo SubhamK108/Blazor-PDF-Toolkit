@@ -1,123 +1,88 @@
 <!DOCTYPE html>
-<html>
-
-<head>
+<html class="max-w-[100vw] overflow-x-hidden" lang="en">
+  <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>PDF Toolkit - Subham Karmakar</title>
-    <meta name="description" content="A toolkit for manipulating PDF files.">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>PDF Toolkit</title>
     <base href="/" />
-    <link rel="shortcut icon" href="favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/loader.css" />
-    <link rel="stylesheet" href="css/circular-loader.css" />
-    <noscript>
-        <link rel="stylesheet" href="css/noscript.css" /></noscript>
-</head>
+    <link rel="stylesheet" href="css/main.min.css" />
+    <link rel="stylesheet" href="fontawesome/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="fontawesome/css/brands.min.css" />
+    <link rel="stylesheet" href="fontawesome/css/solid.min.css" />
+    <meta name="description" content="Various tools for manipulating PDF files." />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:url" content="https://blazor-pdftoolkit.subhamk.com" />
+    <meta name="twitter:title" content="PDF Toolkit" />
+    <meta name="twitter:description" content="Various tools for manipulating PDF files." />
+    <meta name="twitter:image" content="https://blazor-pdftoolkit.subhamk.com/android-chrome-512x512.png" />
+    <meta name="twitter:creator" content="@SubhamK108" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="PDF Toolkit" />
+    <meta property="og:description" content="Various tools for manipulating PDF files." />
+    <meta property="og:site_name" content="PDF Toolkit" />
+    <meta property="og:url" content="https://blazor-pdftoolkit.subhamk.com" />
+    <meta property="og:image" content="https://blazor-pdftoolkit.subhamk.com/android-chrome-512x512.png" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F3F5" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#181818" />
+  </head>
 
-<body>
+  <body class="max-w-[100vw] overflow-x-hidden bg-[#F2F3F5] dark:bg-[#181818] text-[#404756] dark:text-[#ffffffa6]">
+    <div id="app">
+      <div class="h-screen flex flex-col justify-center items-center">
+        <img
+          class="mb-16 max-sm:mb-12 w-[250px] max-sm:w-[150px] h-auto"
+          src="android-chrome-512x512.png"
+          alt="PDF Toolkit App Icon"
+        />
 
-    <app>
-
-        <h1 class="loading-header">Hello There! 😀</h1>
-
-        <div class="cube-wrapper">
-            <div class="cube-folding">
-                <span class="leaf1"></span>
-                <span class="leaf2"></span>
-                <span class="leaf3"></span>
-                <span class="leaf4"></span>
-            </div>
+        <div class="m-4 flex flex-row space-x-4 justify-center items-center">
+          <div
+            class="w-[5.5rem] h-[5.5rem] max-sm:w-[4.5rem] max-sm:h-[4.5rem] rounded-full animate-spin border-[6.5px] max-sm:border-[5px] border-solid border-current border-t-transparent"
+          ></div>
         </div>
-
-        <h1 class="loading-footer">Welcome to my PDF Toolkit</h1>
-
-    </app>
-
+      </div>
+    </div>
 
     <!-- <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
+      An unhandled error has occurred.
+      <a href="" class="reload">Reload</a>
+      <a class="dismiss">🗙</a>
     </div> -->
 
-</body>
+    <!-- Script for getting the orientation of an image -->
+    <script type="text/javascript">
+      async function getImageDimensions(imageBuffer) {
+        const bmpImage = await createImageBitmap(new Blob([imageBuffer]));
+        const imgWidth = bmpImage.width;
+        const imgHeight = bmpImage.height;
+        bmpImage.close();
 
-<!-- Start Single Page Apps for GitHub Pages -->
-<script type="text/javascript">
-
-    // Single Page Apps for GitHub Pages
-    // https://github.com/rafrex/spa-github-pages
-    // Copyright (c) 2016 Rafael Pedicini, licensed under the MIT License
-    // ----------------------------------------------------------------------
-    // This script checks to see if a redirect is present in the query string
-    // and converts it back into the correct url and adds it to the
-    // browser's history using window.history.replaceState(...),
-    // which won't cause the browser to attempt to load the new url.
-    // When the single page app is loaded further down in this file,
-    // the correct url will be waiting in the browser's history for
-    // the single page app to route accordingly.
-    (function (l) {
-        if (l.search) {
-            var q = {};
-            l.search.slice(1).split('&').forEach(function (v) {
-                var a = v.split('=');
-                q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
-            });
-            if (q.p !== undefined) {
-                window.history.replaceState(null, null,
-                    l.pathname.slice(0, -1) + (q.p || '') +
-                    (q.q ? ('?' + q.q) : '') +
-                    l.hash
-                );
-            }
-        }
-    }(window.location))
-
-</script>
-<!-- End Single Page Apps for GitHub Pages -->
-
-<!-- Scripts for toggling the theme -->
-<script type="text/javascript">
-
-    function getCurrentTheme() {
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            return 'icon solid fas fa-sun';
+        if (imgWidth > imgHeight) {
+          return [`${imgWidth}`, `${imgHeight}`, "Landscape"];
         } else {
-            return 'icon solid fas fa-moon';
+          return [`${imgWidth}`, `${imgHeight}`, "Portrait"];
         }
-    }
+      }
+    </script>
 
-    function toggleBodyTheme(themeIcon) {
-        if (themeIcon == 'icon solid fas fa-sun') {
-            document.body.className = 'light';
-        } else {
-            document.body.className = 'dark';
-        }
-    }
+    <!-- Script for getting the Blob Object URL of a file -->
+    <script type="text/javascript">
+      function getBlobObjectUrl(fileBuffer, fileType) {
+        return URL.createObjectURL(new Blob([fileBuffer], { type: fileType }));
+      }
+    </script>
 
-</script>
-
-<!-- Script to download a file -->
-<script type="text/javascript">
-
-    function saveAsFile(fileName, file) {
-        var link = document.createElement('a');
-        link.download = fileName;
-        link.href = file;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-</script>
-
-<script src="_framework/blazor.webassembly.js"></script>
-<script>navigator.serviceWorker.register('service-worker.js');</script>
-
-
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script>
+      navigator.serviceWorker.register("service-worker.js");
+    </script>
+  </body>
 </html>
