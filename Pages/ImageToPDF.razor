@@ -117,12 +117,23 @@
         byte[] imageBuffer = new byte[uploadedImage.Size];
         await uploadedImage.OpenReadStream(ImageConverter.MaxSizeAllowed).ReadAsync(imageBuffer);
 
-        ImageConverter.PreviewImageUrl = await JS.InvokeAsync<string>("getBlobObjectUrl", imageBuffer, uploadedImageType);
-        ImageConverter.ImageOrientation = await JS.InvokeAsync<string>("getImageOrientation", imageBuffer) switch
+        string[] imageDimensions = await JS.InvokeAsync<string[]>("getImageDimensions", imageBuffer);
+        int imageWidth = Convert.ToInt32(imageDimensions[0]);
+        int imageHeight = Convert.ToInt32(imageDimensions[1]);
+        ImageConverter.ImageOrientation = imageDimensions[2] switch
         {
             "Landscape" => ImageConverter.ImageOrientations.LANDSCAPE,
             _ => ImageConverter.ImageOrientations.PORTRAIT
         };
+
+        if (uploadedImageType.Equals("image/png"))
+        {
+            uploadedImage = await files.File.RequestImageFileAsync("image/jpeg", imageWidth, imageHeight);
+            imageBuffer = new byte[uploadedImage.Size];
+            await uploadedImage.OpenReadStream(ImageConverter.MaxSizeAllowed).ReadAsync(imageBuffer);
+        }
+
+        ImageConverter.PreviewImageUrl = await JS.InvokeAsync<string>("getBlobObjectUrl", imageBuffer, uploadedImageType);
         ImageConverter.UploadedImage = new()
         {
             Id = Guid.NewGuid(),
@@ -158,7 +169,16 @@
         ImageConverter.UploadedImage = null;
     }
 
-    private void SubmitImage()
+    private async Task SubmitImage()
     {
+        Core.SubmitMessage = "Converting the Image to a PDF file... ⏳";
+        ImageConverter.IsConversionInitiated = true;
+
+        await Task.Delay(1000);
+        ImageConverterCore.ConvertImageToPdf();
+
+        Core.DownloadMessage = "Successfully Converted the Image to a PDF File. ✅";
+        ImageConverter.IsConversionComplete = true;
+        StateHasChanged();
     }
 }

@@ -59,16 +59,16 @@
 
     <!-- Script for getting the orientation of an image -->
     <script type="text/javascript">
-      async function getImageOrientation(imageBuffer) {
+      async function getImageDimensions(imageBuffer) {
         const bmpImage = await createImageBitmap(new Blob([imageBuffer]));
-        const width = bmpImage.width;
-        const height = bmpImage.height;
+        const imgWidth = bmpImage.width;
+        const imgHeight = bmpImage.height;
         bmpImage.close();
 
-        if (width > height) {
-          return "Landscape";
+        if (imgWidth > imgHeight) {
+          return [`${imgWidth}`, `${imgHeight}`, "Landscape"];
         } else {
-          return "Portrait";
+          return [`${imgWidth}`, `${imgHeight}`, "Portrait"];
         }
       }
     </script>
