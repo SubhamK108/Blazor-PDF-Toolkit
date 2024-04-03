@@ -16,10 +16,10 @@ jobs:
           dotnet-version: 8.x
 
       - name: Build .NET Project
-        run: dotnet build -c Release
+        run: dotnet build Blazor.PDF.Toolkit.csproj -c Release
 
       - name: Publish .NET Project
-        run: dotnet publish -c Release -o publish
+        run: dotnet publish Blazor.PDF.Toolkit.csproj -c Release -o publish
 
       - name: Copy 'index.html' to '404.html'
         run: cp publish/wwwroot/index.html publish/wwwroot/404.html
