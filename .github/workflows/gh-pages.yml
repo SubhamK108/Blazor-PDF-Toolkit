@@ -31,7 +31,7 @@ jobs:
         run: echo 'blazor-pdftoolkit.subhamk.com' > publish/wwwroot/CNAME
 
       - name: Commit 'wwwroot' folder to GitHub Pages branch
-        uses: JamesIves/github-pages-deploy-action@4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
