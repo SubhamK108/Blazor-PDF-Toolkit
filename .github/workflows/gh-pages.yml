@@ -1,0 +1,38 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
+      - name: Build .NET Project
+        run: dotnet build -c Release
+
+      - name: Publish .NET Project
+        run: dotnet publish -c Release -o publish
+
+      - name: Copy 'index.html' to '404.html'
+        run: cp publish/wwwroot/index.html publish/wwwroot/404.html
+
+      - name: Add '.nojekyll' file
+        run: touch publish/wwwroot/.nojekyll
+
+      - name: Add 'CNAME' file
+        run: echo 'blazor-pdftoolkit.subhamk.com' > publish/wwwroot/CNAME
+
+      - name: Commit 'wwwroot' folder to GitHub Pages branch
+        uses: JamesIves/github-pages-deploy-action@4
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: publish/wwwroot
