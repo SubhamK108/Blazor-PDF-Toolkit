@@ -44,7 +44,7 @@
                         <p class="px-6 mb-4">Enter a Password:</p>
                         <input
                             class="mb-4 border border-[#AEAEAE] rounded-lg font-mono h-auto w-80 max-sm:w-52 mx-auto text-center"
-                            type="text" 
+                            type="password" 
                             @bind="Encryptor.Password" 
                             @bind:event="oninput" 
                             @bind:after="ResetReTypedPassword"
@@ -62,7 +62,7 @@
                         }
                         <input
                             class="mb-4 border border-[#AEAEAE] rounded-lg font-mono h-auto w-80 max-sm:w-52 mx-auto text-center"
-                            type="text" 
+                            type="password" 
                             @bind="Encryptor.ReTypedPassword" 
                             @bind:event="oninput"
                             @bind:after="StartEncryptorValidator" 
@@ -226,7 +226,16 @@
         StateHasChanged();
     }
 
-    private void SubmitFile()
+    private async Task SubmitFile()
     {
+        Core.SubmitMessage = "Encrypting the PDF file... ⏳";
+        Encryptor.IsEncryptionInitiated = true;
+
+        await Task.Delay(1000);
+        EncryptorCore.EncryptPdf();
+
+        Core.DownloadMessage = "Successfully Encrypted the PDF File. ✅";
+        Encryptor.IsEncryptionComplete = true;
+        StateHasChanged();
     }
 }
