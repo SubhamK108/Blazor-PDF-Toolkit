@@ -31,6 +31,7 @@
                             width="@(800)" 
                             height="@(800)" 
                             loading="eager"
+                            @onload="DisposePreviewImageUrl"
                             class="@($"rounded-3xl shadow-lg shadow-[#404756] dark:shadow-none dark:border-2 dark:border-[#ffffffa6] {(ImageConverter.ImageOrientation == ImageConverter.ImageOrientations.LANDSCAPE ? "w-[600px] max-sm:w-64" : "w-80 max-sm:w-32")}")" 
                         />
                     </div>
@@ -167,6 +168,11 @@
         Core.UploadMessage = "Image deleted.";
         Core.UploadErrorMessage = "You have to upload again.";
         ImageConverter.UploadedImage = null;
+    }
+
+    private async Task DisposePreviewImageUrl()
+    {
+        await JS.InvokeVoidAsync("disposeBlobObjectUrl", ImageConverter.PreviewImageUrl);
     }
 
     private async Task SubmitImage()
