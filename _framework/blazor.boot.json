@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Blazor.PDF.Toolkit",
   "resources": {
-    "hash": "sha256-jHGNPVSkl9Tym2DKtI5O/AN+iORzPKvR4i9DgIWMX+Q=",
+    "hash": "sha256-sfuugY3MwzpLhYxfVAQ72x7MBSBLbjeNdsOO4UUU3RE=",
     "jsModuleNative": {
       "dotnet.native.8.0.3.g26dxzi3j9.js": "sha256-RymisEDLsEdAPAxLoPPTe4UhwYqihj8j5qfsfGCjyWQ="
     },
@@ -17,7 +17,7 @@
       "icudt_no_CJK.dat": "sha256-L7sV7NEYP37/Qr2FPCePo5cJqRgTXRwGHuwF5Q+0Nfs="
     },
     "assembly": {
-      "Blazor.PDF.Toolkit.wasm": "sha256-bZoI5gHQWM8L5TGXQ5aHyLU5mLCu6ydsmcxqofZbJYU=",
+      "Blazor.PDF.Toolkit.wasm": "sha256-VmmG2knB10HcXfQ3Qq5BCddjsq54C8K9wwOW9QCYR4g=",
       "BouncyCastle.Cryptography.wasm": "sha256-tZxUz5R8To9wugB18BSeGE89A5lQ0IsnaCl5AkgKfnY=",
       "itext.barcodes.wasm": "sha256-RmRC52AMcCg27thY12F23YOCjgjDzwCxze7PloBoxj4=",
       "itext.bouncy-castle-adapter.wasm": "sha256-XOpKVRltsQuKkpTWWIk55FtH7VTCS+JgNvG3YtBnJbI=",
