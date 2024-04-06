@@ -57,7 +57,7 @@
       <a class="dismiss">🗙</a>
     </div> -->
 
-    <!-- Script for getting the orientation of an image -->
+    <!-- Script for getting the dimensions of an image -->
     <script type="text/javascript">
       async function getImageDimensions(imageBuffer) {
         const bmpImage = await createImageBitmap(new Blob([imageBuffer]));
@@ -73,10 +73,17 @@
       }
     </script>
 
-    <!-- Script for getting the Blob Object URL of a file -->
+    <!-- Script for generating the Blob Object URL of a file -->
     <script type="text/javascript">
       function getBlobObjectUrl(fileBuffer, fileType) {
         return URL.createObjectURL(new Blob([fileBuffer], { type: fileType }));
+      }
+    </script>
+
+    <!-- Script for disposing the Blob Object URL of a file -->
+    <script type="text/javascript">
+      function disposeBlobObjectUrl(url) {
+        URL.revokeObjectURL(url);
       }
     </script>
 
