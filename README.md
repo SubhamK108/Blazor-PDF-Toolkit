@@ -1,6 +1,6 @@
 # Blazor-PDF-Toolkit
 
-### A Web Application written in Blazor Webassembly (.NET) that has various tools for manipulating PDF files.
+### A Web Application built with .NET Blazor Webassembly (C#) and TailwindCSS that has various tools for manipulating PDF files.
 
 #### Visit the app [Here](https://blazor-pdftoolkit.subhamk.com)
 
